@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { BusinessCategory } from '../types';
+import { BusinessCategory, AlumniFormData } from '../types';
 import { generateDescription } from '../services/geminiService';
 import { addAlumni } from '../services/alumniService';
 import { SparklesIcon } from './IconComponents';
@@ -24,11 +24,11 @@ const SuccessView: React.FC<{ onClose: () => void }> = ({ onClose }) => (
 
 
 const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Omit<AlumniFormData, 'imageBase64'>>({
     name: '',
     generation: '',
     businessName: '',
-    category: BusinessCategory.OTHER,
+    category: [],
     description: '',
     publicContact: '',
     website: '',
@@ -50,14 +50,24 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
     const newErrors: Record<string, string> = {};
     if (!formData.name) newErrors.name = 'กรุณาระบุชื่อ-สกุล';
     if (!formData.businessName) newErrors.businessName = 'กรุณาระบุชื่อกิจการ/ทักษะ';
+    if (formData.category.length === 0) newErrors.category = 'กรุณาเลือกอย่างน้อยหนึ่งหมวดหมู่';
     if (!formData.description) newErrors.description = 'กรุณาใส่คำอธิบายกิจการ';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleCategoryToggle = (categoryToToggle: BusinessCategory) => {
+    setFormData(prev => {
+        const newCategories = prev.category.includes(categoryToToggle)
+            ? prev.category.filter(c => c !== categoryToToggle)
+            : [...prev.category, categoryToToggle];
+        return { ...prev, category: newCategories };
+    });
   };
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,14 +124,15 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
   };
 
   const handleGenerateDescription = async () => {
-    if (!formData.businessName || !formData.category) {
+    if (!formData.businessName || formData.category.length === 0) {
       setGeminiError('กรุณากรอกชื่อกิจการและเลือกประเภทก่อน');
       return;
     }
     setIsGenerating(true);
     setGeminiError('');
     try {
-      const description = await generateDescription(formData.businessName, formData.category);
+      const categoryText = formData.category.join(', ');
+      const description = await generateDescription(formData.businessName, categoryText);
       setFormData(prev => ({...prev, description}));
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "เกิดข้อผิดพลาดที่ไม่รู้จัก";
@@ -155,9 +166,23 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
         </div>
       <div>
         <label htmlFor="category" className="block text-sm font-medium text-gray-700">ประเภทกิจการ*</label>
-        <select name="category" id="category" value={formData.category} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 bg-white rounded-md shadow-sm">
-          {Object.values(BusinessCategory).map(cat => <option key={cat} value={cat}>{cat}</option>)}
-        </select>
+        <div className="mt-2 flex flex-wrap gap-2">
+            {Object.values(BusinessCategory).map(cat => (
+                <button
+                type="button"
+                key={cat}
+                onClick={() => handleCategoryToggle(cat)}
+                className={`px-3 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 border ${
+                    formData.category.includes(cat)
+                    ? 'bg-green-700 text-white border-green-700 shadow'
+                    : 'bg-white text-gray-700 hover:bg-green-100 border-gray-300'
+                }`}
+                >
+                {cat}
+                </button>
+            ))}
+        </div>
+        {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
       </div>
       <div>
         <div className="flex justify-between items-center">

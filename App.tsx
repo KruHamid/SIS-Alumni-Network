@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
 import CategoryFilter from './components/CategoryFilter';
@@ -6,7 +7,7 @@ import Modal from './components/Modal';
 import AlumniForm from './components/AlumniForm';
 import Footer from './components/Footer';
 import AlumniDetailView from './components/AlumniDetailView';
-import { AlumniProfile } from './types';
+import { AlumniProfile, BusinessCategory } from './types';
 import { getAlumni } from './services/alumniService';
 
 const LoadingSpinner: React.FC = () => (
@@ -39,7 +40,9 @@ const App: React.FC = () => {
       try {
         setStatus('loading');
         const data = await getAlumni();
-        setProfiles(data);
+        // สุ่มลำดับข้อมูลศิษย์เก่าเพื่อให้การแสดงผลน่าสนใจยิ่งขึ้น
+        const shuffledData = [...data].sort(() => Math.random() - 0.5);
+        setProfiles(shuffledData);
         setStatus('success');
       } catch (err: any) {
         setError(err.message || "เกิดข้อผิดพลาดที่ไม่รู้จัก");
@@ -61,7 +64,8 @@ const App: React.FC = () => {
     if (!selectedCategory) {
       return profiles;
     }
-    return profiles.filter(profile => profile.category === selectedCategory);
+    // A profile can have multiple categories, so check if the selected one is in its list.
+    return profiles.filter(profile => profile.category.includes(selectedCategory as BusinessCategory));
   }, [profiles, selectedCategory]);
   
   if (status === 'loading') {

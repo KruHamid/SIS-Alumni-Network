@@ -22,39 +22,41 @@ const InfoRow: React.FC<{ icon: React.ReactNode; children: React.ReactNode; href
 
 
 const AlumniDetailView: React.FC<AlumniDetailViewProps> = ({ profile }) => {
-  const defaultImage = `https://picsum.photos/seed/${profile.id}/200`;
-
-  const getImageUrl = () => {
-    const transformedUrl = transformToDirectGdriveUrl(profile.profileImage);
-    return transformedUrl || defaultImage;
-  };
-  
-  const [imageSrc, setImageSrc] = useState(getImageUrl());
+  const imageUrl = transformToDirectGdriveUrl(profile.profileImage);
+  const [showImage, setShowImage] = useState(!!imageUrl);
 
   // This effect ensures that if the modal is reused for a different profile, the image resets correctly.
   useEffect(() => {
-    setImageSrc(getImageUrl());
+    setShowImage(!!transformToDirectGdriveUrl(profile.profileImage));
   }, [profile.id, profile.profileImage]);
 
   const handleImageError = () => {
-    // Fallback to a placeholder if the provided image URL is invalid.
-    if (imageSrc !== defaultImage) {
-      setImageSrc(defaultImage);
-    }
+    // Fallback to the icon if the provided image URL is invalid.
+    setShowImage(false);
   };
 
 
   return (
     <div className="flex flex-col">
         <div className="flex items-start gap-4 mb-4">
-             <img 
-                src={imageSrc} 
-                onError={handleImageError}
-                alt={profile.name} 
-                className="w-24 h-24 rounded-lg object-cover border-4 border-green-100 bg-gray-200"
-            />
+            <div className="w-24 h-24 rounded-lg border-4 border-green-100 bg-gray-200 flex-shrink-0 flex items-center justify-center overflow-hidden">
+                {showImage && imageUrl ? (
+                    <img 
+                        src={imageUrl} 
+                        onError={handleImageError}
+                        alt={profile.name} 
+                        className="w-full h-full object-cover"
+                    />
+                ) : (
+                    <UserIcon className="w-16 h-16 text-gray-400" />
+                )}
+            </div>
             <div className="flex-1">
-                <p className="text-sm text-gray-500 bg-green-50 inline-block px-2 py-1 rounded-full mt-1">{profile.category}</p>
+                 <div className="flex flex-wrap gap-2">
+                    {profile.category.map(cat => (
+                        <p key={cat} className="text-xs text-green-800 bg-green-100 font-semibold inline-block px-2.5 py-1 rounded-full">{cat}</p>
+                    ))}
+                </div>
                  <p className="text-gray-600 mt-4">{profile.description}</p>
             </div>
         </div>

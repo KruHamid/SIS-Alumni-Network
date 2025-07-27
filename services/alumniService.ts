@@ -7,6 +7,37 @@ import { AlumniProfile, BusinessCategory, AlumniFormData } from '../types';
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySFzRhZjbvDMhn3381Klq0jP6Y_1EQaEngIcqcVtX0oh6m3R5TOhH-7TWcB_hyI9mYxQ/exec';
 
 
+// =====================================================================================
+// หมายเหตุสำคัญ: วิธีแก้ไขเบอร์โทรศัพท์ที่ขึ้นต้นด้วย 0 แล้วเลข 0 หายไป
+// =====================================================================================
+// ปัญหานี้มักเกิดจาก Google Sheets จัดรูปแบบคอลัมน์เบอร์โทรศัพท์เป็น "ตัวเลข" (Number) โดยอัตโนมัติ
+// ทำให้เลข 0 ที่นำหน้าถูกตัดออกไปก่อนที่ข้อมูลจะถูกส่งมายังแอปพลิเคชัน
+//
+// วิธีแก้ไข:
+// 1. เปิด Google Sheet ที่เป็นฐานข้อมูลของคุณ
+// 2. เลือกคอลัมน์ทั้งหมดที่ใช้เก็บเบอร์โทรศัพท์ (เช่น คอลัมน์ publicContact)
+// 3. ไปที่เมนู "รูปแบบ" (Format) -> "ตัวเลข" (Number) -> "ข้อความธรรมดา" (Plain text)
+// 4. หลังจากเปลี่ยนรูปแบบแล้ว, ข้อมูลเบอร์โทรศัพท์ที่มีอยู่ อาจจะต้องใส่เลข 0 นำหน้าเข้าไปใหม่
+// 5. ข้อมูลใหม่ที่เพิ่มเข้ามาหลังจากนี้จะเก็บเลข 0 นำหน้าไว้ได้อย่างถูกต้อง
+//
+// การทำเช่นนี้จะทำให้ Google Sheets และ Apps Script ส่งข้อมูลเบอร์โทรศัพท์มาเป็น "ข้อความ" (String)
+// แทนที่จะเป็น "ตัวเลข" (Number) และแอปพลิเคชันจะสามารถแสดงผลได้อย่างถูกต้อง
+// =====================================================================================
+
+// =====================================================================================
+// หมายเหตุสำหรับนักพัฒนา (Backend/Google Apps Script):
+// =====================================================================================
+// เนื่องจากตอนนี้สามารถเลือกได้หลายหมวดหมู่ (Category) ข้อมูลที่ส่งจากฟอร์มในส่วน `category`
+// จะเป็น Array ของ String (เช่น ["อาหารและเครื่องดื่ม", "บริการ"])
+//
+// ใน Google Apps Script:
+// 1. เมื่อรับข้อมูล (doPost): ให้แปลง Array นี้เป็น String ที่คั่นด้วยจุลภาค (comma)
+//    ก่อนบันทึกลงในชีต เช่น `categories.join(',')`
+// 2. เมื่อส่งข้อมูล (doGet): ให้อ่าน String จากชีต แล้วแปลงกลับเป็น Array ด้วยการ
+//    `split(',')` ก่อนส่งกลับมาเป็น JSON
+// =====================================================================================
+
+
 // --- MOCK DATA FOR DEVELOPMENT ---
 const MOCK_ALUMNI_DATA: AlumniProfile[] = [
     {
@@ -14,7 +45,7 @@ const MOCK_ALUMNI_DATA: AlumniProfile[] = [
         name: 'นายสันติ ชน',
         generation: 'SIS01',
         businessName: 'ร้านอาหาร-ตามสั่ง สันติชน',
-        category: BusinessCategory.FOOD_AND_BEVERAGE,
+        category: [BusinessCategory.FOOD_AND_BEVERAGE, BusinessCategory.SERVICE],
         description: 'ร้านอาหารตามสั่งและอาหารฮาลาลต้นตำรับ เปิดมานานกว่า 10 ปี บริการอาหารจานด่วนและเมนูพิเศษประจำวัน',
         publicContact: '081-234-5678',
         website: 'https://facebook.com/santichonfood',
@@ -26,7 +57,7 @@ const MOCK_ALUMNI_DATA: AlumniProfile[] = [
         name: 'นางสาวมานี มีดี',
         generation: 'SIS02',
         businessName: 'Manee Design & Art',
-        category: BusinessCategory.FREELANCE,
+        category: [BusinessCategory.FREELANCE],
         description: 'รับออกแบบกราฟิก, โลโก้, และสื่อโฆษณาทุกชนิด มีประสบการณ์ทำงานกับบริษัทชั้นนำ',
         publicContact: 'contact@maneedesign.com',
         website: 'https://www.behance.net/maneedesign',
@@ -57,7 +88,16 @@ export const getAlumni = async (): Promise<AlumniProfile[]> => {
     if (data.result === 'error') {
       throw new Error(`Error from Google Script: ${data.message}`);
     }
-    return data as AlumniProfile[];
+    
+    // Transform category string from sheet (e.g., "Cat1,Cat2") into an array
+    const transformedData = data.map((profile: any) => ({
+        ...profile,
+        category: typeof profile.category === 'string' 
+            ? profile.category.split(',').map((c: string) => c.trim()).filter(Boolean) 
+            : Array.isArray(profile.category) ? profile.category : []
+    }));
+
+    return transformedData as AlumniProfile[];
   } catch (error) {
     console.error("Failed to fetch alumni data:", error);
     throw new Error("ไม่สามารถโหลดข้อมูลศิษย์เก่าได้ กรุณาตรวจสอบการตั้งค่า Google Script หรือลองอีกครั้งในภายหลัง");

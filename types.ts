@@ -15,7 +15,7 @@ export interface AlumniProfile {
   name: string;
   generation?: string;
   businessName: string;
-  category: BusinessCategory;
+  category: BusinessCategory[];
   description: string;
   publicContact?: string;
   website?: string;
