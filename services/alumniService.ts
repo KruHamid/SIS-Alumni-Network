@@ -4,7 +4,7 @@ import { AlumniProfile, BusinessCategory, AlumniFormData } from '../types';
 // =====================================================================================
 // สำคัญ: กรุณาแทนที่ URL นี้ด้วย URL ของ Google Apps Script ที่คุณสร้างขึ้น
 // =====================================================================================
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySFzRhZjbvDMhn3381Klq0jP6Y_1EQaEngIcqcVtX0oh6m3R5TOhH-7TWcB_hyI9mYxQ/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBdbKf3aaerStg89tJukO7GXQ1tbsZtADXaiuu9KJIOs7ikJOGZvEK9zHOgSraubbQ-w/exec';
 
 
 // --- MOCK DATA FOR DEVELOPMENT ---
