@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { AlumniProfile } from '../types';
 import { AcademicCapIcon, GlobeAltIcon, LocationMarkerIcon, PhoneIcon, UserIcon } from './IconComponents';
+import { transformToDirectGdriveUrl } from '../utils';
 
 interface AlumniDetailViewProps {
   profile: AlumniProfile;
@@ -18,30 +20,24 @@ const InfoRow: React.FC<{ icon: React.ReactNode; children: React.ReactNode; href
     return <div className="p-2">{content}</div>
 };
 
-const transformGoogleDriveUrl = (url?: string): string | undefined => {
-  if (!url || !url.includes('drive.google.com')) {
-    return url;
-  }
-  const match = url.match(/drive\.google\.com\/file\/d\/([^/?]+)/);
-  if (match && match[1]) {
-    const fileId = match[1];
-    return `https://lh3.googleusercontent.com/d/${fileId}`;
-  }
-  return url;
-};
 
 const AlumniDetailView: React.FC<AlumniDetailViewProps> = ({ profile }) => {
-  const [imageSrc, setImageSrc] = useState(() => transformGoogleDriveUrl(profile.profileImage) || `https://picsum.photos/seed/${profile.id}/200`);
+  const defaultImage = `https://picsum.photos/seed/${profile.id}/200`;
+
+  const getImageUrl = () => {
+    const transformedUrl = transformToDirectGdriveUrl(profile.profileImage);
+    return transformedUrl || defaultImage;
+  };
+  
+  const [imageSrc, setImageSrc] = useState(getImageUrl());
 
   // This effect ensures that if the modal is reused for a different profile, the image resets correctly.
   useEffect(() => {
-    const newImageSrc = transformGoogleDriveUrl(profile.profileImage) || `https://picsum.photos/seed/${profile.id}/200`;
-    setImageSrc(newImageSrc);
+    setImageSrc(getImageUrl());
   }, [profile.id, profile.profileImage]);
 
   const handleImageError = () => {
     // Fallback to a placeholder if the provided image URL is invalid.
-    const defaultImage = `https://picsum.photos/seed/${profile.id}/200`;
     if (imageSrc !== defaultImage) {
       setImageSrc(defaultImage);
     }
