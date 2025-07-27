@@ -23,7 +23,6 @@ const MOCK_ALUMNI_DATA: AlumniProfile[] = [
         website: 'https://facebook.com/santichonfood',
         location: '123 ถนนลาดพร้าว, กรุงเทพมหานคร',
         profileImage: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=400',
-        privateContact: '091-111-1111'
     },
     {
         id: '2',
@@ -36,7 +35,6 @@ const MOCK_ALUMNI_DATA: AlumniProfile[] = [
         website: 'https://www.behance.net/maneedesign',
         location: 'ออนไลน์',
         profileImage: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?q=80&w=400',
-        privateContact: '092-222-2222'
     },
     {
         id: '3',
@@ -49,7 +47,6 @@ const MOCK_ALUMNI_DATA: AlumniProfile[] = [
         website: '',
         location: 'พันธุ์ทิพย์พลาซ่า ชั้น 3',
         profileImage: 'https://images.unsplash.com/photo-1593786267439-50c66cb17b43?q=80&w=400',
-        privateContact: '093-333-3333'
     },
     {
         id: '4',
@@ -62,7 +59,6 @@ const MOCK_ALUMNI_DATA: AlumniProfile[] = [
         website: 'https://instagram.com/fatimabakery',
         location: 'สั่งออนไลน์เท่านั้น',
         profileImage: 'https://images.unsplash.com/photo-1588195538326-c5b1e9f80a1b?q=80&w=400',
-        privateContact: '094-444-4444'
     },
     {
         id: '5',
@@ -75,7 +71,6 @@ const MOCK_ALUMNI_DATA: AlumniProfile[] = [
         website: 'https://www.adamtutor.com',
         location: 'ใกล้ BTS สยาม',
         profileImage: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=400',
-        privateContact: '095-555-5555'
     }
 ];
 // --- END OF MOCK DATA ---
@@ -116,18 +111,21 @@ export const addAlumni = async (profileData: Omit<AlumniProfile, 'id'>): Promise
   }
 
   try {
-    // Google Apps Script ต้องการ body ที่เป็น string แม้จะส่ง JSON ก็ตาม
     const response = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       body: JSON.stringify(profileData),
       headers: {
-        'Content-Type': 'text/plain;charset=utf-8', // ใช้ text/plain เป็นข้อกำหนดของ Apps Script
+        'Content-Type': 'text/plain;charset=utf-8',
       },
-       mode: 'no-cors' // no-cors สำหรับ doPost ที่ redirect
     });
     
-    // no-cors mode จะทำให้เราไม่สามารถอ่าน response body หรือ status ได้
-    // เราจะถือว่าถ้าไม่มี error เกิดขึ้นคือการส่งสำเร็จ
+    // Since Google Apps Script doPost can redirect, a successful POST might not have a parsable body
+    // but we can check the 'ok' status. A simple success check is sufficient here.
+    if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+    }
+
+    // Assuming a successful response means the data was accepted.
     return { result: "success" };
 
   } catch (error) {

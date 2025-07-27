@@ -33,7 +33,6 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
     publicContact: '',
     website: '',
     location: '',
-    privateContact: '',
     profileImage: ''
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -160,13 +159,7 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
         <input type="text" name="location" id="location" value={formData.location} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" />
       </div>
 
-      <h4 className="text-lg font-semibold text-red-700 border-t pt-4 mt-4">ข้อมูลส่วนตัว (ลับเฉพาะ)</h4>
-       <div>
-        <label htmlFor="privateContact" className="block text-sm font-medium text-gray-700">เบอร์โทรศัพท์ส่วนตัว (จะแสดงเมื่อกดปุ่ม)</label>
-        <input type="text" name="privateContact" id="privateContact" value={formData.privateContact} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" />
-      </div>
-
-      <div className="flex justify-end gap-3 pt-4">
+      <div className="flex justify-end gap-3 pt-4 border-t mt-4">
         <button type="button" onClick={onClose} className="py-2 px-4 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">ยกเลิก</button>
         <button type="submit" disabled={submissionStatus === 'submitting'} className="py-2 px-4 bg-green-700 text-white rounded-lg hover:bg-green-800 disabled:bg-green-400 disabled:cursor-wait">
           {submissionStatus === 'submitting' ? 'กำลังบันทึก...' : 'บันทึกข้อมูล'}

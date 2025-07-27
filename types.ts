@@ -20,6 +20,5 @@ export interface AlumniProfile {
   publicContact?: string;
   website?: string;
   location?: string;
-  privateContact?: string;
   profileImage?: string;
 }

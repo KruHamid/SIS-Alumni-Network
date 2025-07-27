@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { AlumniProfile } from '../types';
-import { AcademicCapIcon, GlobeAltIcon, LocationMarkerIcon, LockClosedIcon, PhoneIcon, UserIcon } from './IconComponents';
+import { AcademicCapIcon, GlobeAltIcon, LocationMarkerIcon, PhoneIcon, UserIcon } from './IconComponents';
 
 interface AlumniDetailViewProps {
   profile: AlumniProfile;
@@ -21,7 +21,6 @@ const InfoRow: React.FC<{ icon: React.ReactNode; children: React.ReactNode; href
 
 
 const AlumniDetailView: React.FC<AlumniDetailViewProps> = ({ profile }) => {
-  const [showPrivate, setShowPrivate] = useState(false);
 
   return (
     <div className="flex flex-col">
@@ -43,24 +42,6 @@ const AlumniDetailView: React.FC<AlumniDetailViewProps> = ({ profile }) => {
             {profile.publicContact && <InfoRow icon={<PhoneIcon className="w-5 h-5"/>} href={`tel:${profile.publicContact}`}>{profile.publicContact}</InfoRow>}
             {profile.website && <InfoRow icon={<GlobeAltIcon className="w-5 h-5"/>} href={profile.website}><span className="text-blue-600 hover:underline">{profile.website}</span></InfoRow>}
             {profile.location && <InfoRow icon={<LocationMarkerIcon className="w-5 h-5"/>}>{profile.location}</InfoRow>}
-            
-            {profile.privateContact && (
-                 <div className="p-2 border-t mt-4 pt-4">
-                    {showPrivate ? (
-                        <InfoRow icon={<PhoneIcon className="w-5 h-5 text-red-600" />} href={`tel:${profile.privateContact}`}>
-                            <span className="font-semibold text-red-600">{profile.privateContact} (ส่วนตัว)</span>
-                        </InfoRow>
-                    ) : (
-                        <button 
-                            onClick={() => setShowPrivate(true)} 
-                            className="w-full flex items-center gap-3 text-left text-gray-700 p-2 rounded-md hover:bg-yellow-100 transition-colors border border-yellow-300"
-                        >
-                            <span className="text-yellow-600"><LockClosedIcon className="w-5 h-5"/></span>
-                            <span className="flex-1 text-yellow-800 font-semibold">แสดงข้อมูลติดต่อส่วนตัว</span>
-                        </button>
-                    )}
-                </div>
-            )}
         </div>
     </div>
   );
