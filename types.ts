@@ -22,3 +22,8 @@ export interface AlumniProfile {
   location?: string;
   profileImage?: string;
 }
+
+// New type for the form submission payload
+export interface AlumniFormData extends Omit<AlumniProfile, 'id' | 'profileImage'> {
+    imageBase64: string | null; // Base64 encoded image string
+}

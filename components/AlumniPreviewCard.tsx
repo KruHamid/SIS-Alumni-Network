@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { AlumniProfile } from '../types';
 
 interface AlumniPreviewCardProps {
@@ -8,6 +8,17 @@ interface AlumniPreviewCardProps {
 }
 
 const AlumniPreviewCard: React.FC<AlumniPreviewCardProps> = ({ profile, onSelect }) => {
+  const defaultImage = `https://picsum.photos/seed/${profile.id}/300`;
+  const [imageSrc, setImageSrc] = useState(profile.profileImage || defaultImage);
+
+  const handleImageError = () => {
+    // If the custom image fails, use the default placeholder.
+    // This also prevents an infinite loop if the placeholder itself fails.
+    if (imageSrc !== defaultImage) {
+        setImageSrc(defaultImage);
+    }
+  };
+
   return (
     <div
       onClick={onSelect}
@@ -18,7 +29,8 @@ const AlumniPreviewCard: React.FC<AlumniPreviewCardProps> = ({ profile, onSelect
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onSelect()}
     >
       <img
-        src={profile.profileImage || `https://picsum.photos/seed/${profile.id}/300`}
+        src={imageSrc}
+        onError={handleImageError}
         alt={`Logo for ${profile.businessName}`}
         loading="lazy"
         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { AlumniProfile, BusinessCategory } from '../types';
+import { BusinessCategory } from '../types';
 import { generateDescription } from '../services/geminiService';
 import { addAlumni } from '../services/alumniService';
 import { SparklesIcon } from './IconComponents';
@@ -24,7 +24,7 @@ const SuccessView: React.FC<{ onClose: () => void }> = ({ onClose }) => (
 
 
 const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
-  const [formData, setFormData] = useState<Omit<AlumniProfile, 'id'>>({
+  const [formData, setFormData] = useState({
     name: '',
     generation: '',
     businessName: '',
@@ -33,13 +33,18 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
     publicContact: '',
     website: '',
     location: '',
-    profileImage: ''
   });
+  const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isGenerating, setIsGenerating] = useState(false);
   const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'submitting' | 'error' | 'success'>('idle');
   const [submissionError, setSubmissionError] = useState('');
   const [geminiError, setGeminiError] = useState('');
+  const [imageError, setImageError] = useState('');
+  
+  const MAX_FILE_SIZE_MB = 2;
+  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -54,6 +59,44 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImageError('');
+
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+        setImageError(`ขนาดไฟล์ต้องไม่เกิน ${MAX_FILE_SIZE_MB}MB`);
+        return;
+    }
+
+    if (!['image/jpeg', 'image/png'].includes(file.type)) {
+        setImageError('รองรับเฉพาะไฟล์ JPG และ PNG เท่านั้น');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+        setImageBase64(reader.result as string);
+        if (imagePreview) {
+            URL.revokeObjectURL(imagePreview);
+        }
+        setImagePreview(URL.createObjectURL(file));
+    };
+    reader.onerror = () => {
+        setImageError('ไม่สามารถอ่านไฟล์ได้');
+    };
+  };
+
+  const handleRemoveImage = () => {
+    setImageBase64(null);
+    if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+        setImagePreview(null);
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,11 +104,7 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
     if (validate()) {
         setSubmissionStatus('submitting');
         try {
-            const finalData = {
-                ...formData,
-                profileImage: formData.profileImage || `https://picsum.photos/seed/${Date.now()}/300`
-            };
-            await addAlumni(finalData);
+            await addAlumni({ ...formData, imageBase64 });
             setSubmissionStatus('success');
         } catch(err: any) {
             setSubmissionError(err.message || 'เกิดข้อผิดพลาดในการส่งข้อมูล');
@@ -86,11 +125,7 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
       setFormData(prev => ({...prev, description}));
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "เกิดข้อผิดพลาดที่ไม่รู้จัก";
-        if (errorMessage.includes("API Key")) {
-           setGeminiError("คุณสมบัตินี้ต้องใช้ API Key ที่ตั้งค่าไว้ในระบบ");
-        } else {
-           setGeminiError(errorMessage);
-        }
+        setGeminiError(errorMessage);
     } finally {
       setIsGenerating(false);
     }
@@ -102,7 +137,6 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Form fields are mostly unchanged */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">ชื่อ-สกุล*</label>
@@ -139,12 +173,31 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
       </div>
 
        <div>
-          <label htmlFor="profileImage" className="block text-sm font-medium text-gray-700">URL รูปภาพโปรไฟล์/โลโก้</label>
-          <input type="text" name="profileImage" id="profileImage" placeholder="https://..." value={formData.profileImage} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" />
+          <label className="block text-sm font-medium text-gray-700">รูปภาพโปรไฟล์/โลโก้</label>
+          <div className="mt-1 flex items-center gap-4">
+            {imagePreview ? (
+                 <img src={imagePreview} alt="Preview" className="w-20 h-20 rounded-lg object-cover bg-gray-200" />
+            ) : (
+                <div className="w-20 h-20 rounded-lg bg-gray-200 flex items-center justify-center text-gray-400">
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1-1m-6 0h.01M16 16v-4m0 4h4m-4 0l-1.5-1.5" /></svg>
+                </div>
+            )}
+            <div>
+                 <label htmlFor="file-upload" className="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50">
+                    เลือกรูปภาพ
+                 </label>
+                 <input id="file-upload" name="file-upload" type="file" className="hidden-file-input" onChange={handleFileChange} accept="image/png, image/jpeg" />
+                 {imagePreview && (
+                    <button type="button" onClick={handleRemoveImage} className="ml-2 text-sm text-red-600 hover:text-red-800">ลบออก</button>
+                 )}
+            </div>
+          </div>
+           {imageError && <p className="text-red-500 text-xs mt-1">{imageError}</p>}
+           <p className="text-xs text-gray-500 mt-1">แนะนำ: ไฟล์ JPG, PNG ขนาดไม่เกิน {MAX_FILE_SIZE_MB}MB</p>
       </div>
 
       <h4 className="text-lg font-semibold text-gray-800 border-t pt-4 mt-4">ข้อมูลสำหรับติดต่อ (สาธารณะ)</h4>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label htmlFor="publicContact" className="block text-sm font-medium text-gray-700">เบอร์โทร/อีเมล (สำหรับติดต่องาน)</label>
           <input type="text" name="publicContact" id="publicContact" value={formData.publicContact} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" />

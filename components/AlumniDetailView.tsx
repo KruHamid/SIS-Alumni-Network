@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AlumniProfile } from '../types';
 import { AcademicCapIcon, GlobeAltIcon, LocationMarkerIcon, PhoneIcon, UserIcon } from './IconComponents';
 
@@ -21,14 +21,31 @@ const InfoRow: React.FC<{ icon: React.ReactNode; children: React.ReactNode; href
 
 
 const AlumniDetailView: React.FC<AlumniDetailViewProps> = ({ profile }) => {
+  const [imageSrc, setImageSrc] = useState(profile.profileImage || `https://picsum.photos/seed/${profile.id}/200`);
+
+  // This effect ensures that if the modal is reused for a different profile, the image resets correctly.
+  useEffect(() => {
+    const newImageSrc = profile.profileImage || `https://picsum.photos/seed/${profile.id}/200`;
+    setImageSrc(newImageSrc);
+  }, [profile.id, profile.profileImage]);
+
+  const handleImageError = () => {
+    // Fallback to a placeholder if the provided image URL is invalid.
+    const defaultImage = `https://picsum.photos/seed/${profile.id}/200`;
+    if (imageSrc !== defaultImage) {
+      setImageSrc(defaultImage);
+    }
+  };
+
 
   return (
     <div className="flex flex-col">
         <div className="flex items-start gap-4 mb-4">
              <img 
-                src={profile.profileImage || `https://picsum.photos/seed/${profile.id}/200`} 
+                src={imageSrc} 
+                onError={handleImageError}
                 alt={profile.name} 
-                className="w-24 h-24 rounded-lg object-cover border-4 border-green-100"
+                className="w-24 h-24 rounded-lg object-cover border-4 border-green-100 bg-gray-200"
             />
             <div className="flex-1">
                 <p className="text-sm text-gray-500 bg-green-50 inline-block px-2 py-1 rounded-full mt-1">{profile.category}</p>
