@@ -6,7 +6,7 @@ interface HeaderProps {
 }
 
 // Use a direct URL for the logo for better reliability and performance
-const logoUrl = "https://i.ibb.co/L5hB2zL/santichon-logo.jpg";
+const logoUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpv0SMImZNvHc5fooRaHPtEeE9xFZn9i-d7w&s";
 
 const Header: React.FC<HeaderProps> = ({ onAddBusinessClick }) => {
   return (
