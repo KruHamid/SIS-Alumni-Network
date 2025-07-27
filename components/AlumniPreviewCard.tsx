@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { AlumniProfile } from '../types';
 
@@ -7,9 +6,21 @@ interface AlumniPreviewCardProps {
   onSelect: () => void;
 }
 
+const transformGoogleDriveUrl = (url?: string): string | undefined => {
+  if (!url || !url.includes('drive.google.com')) {
+    return url;
+  }
+  const match = url.match(/drive\.google\.com\/file\/d\/([^/?]+)/);
+  if (match && match[1]) {
+    const fileId = match[1];
+    return `https://lh3.googleusercontent.com/d/${fileId}`;
+  }
+  return url;
+};
+
 const AlumniPreviewCard: React.FC<AlumniPreviewCardProps> = ({ profile, onSelect }) => {
   const defaultImage = `https://picsum.photos/seed/${profile.id}/300`;
-  const [imageSrc, setImageSrc] = useState(profile.profileImage || defaultImage);
+  const [imageSrc, setImageSrc] = useState(() => transformGoogleDriveUrl(profile.profileImage) || defaultImage);
 
   const handleImageError = () => {
     // If the custom image fails, use the default placeholder.
