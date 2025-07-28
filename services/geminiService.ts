@@ -1,28 +1,31 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Safely access process.env to avoid crashing in browser environments
-const API_KEY = typeof process !== 'undefined' && process.env ? process.env.API_KEY : undefined;
+// Based on the environment requirements, we must assume process.env.API_KEY is available.
+// The check for `typeof process` is removed to align with this requirement.
+const API_KEY = process.env.API_KEY;
 
 let ai: GoogleGenAI | null = null;
+let initError: string | null = null;
 
-// Initialize the AI client only if the API key exists.
-// This prevents the app from crashing on startup if the key is not configured.
+// Initialize the AI client. If API_KEY is missing or invalid, capture the error.
 if (API_KEY) {
   try {
+    // The apiKey must be a non-empty string.
     ai = new GoogleGenAI({ apiKey: API_KEY });
   } catch (error) {
     console.error("Failed to initialize GoogleGenAI, likely due to an invalid API key format:", error);
+    initError = "รูปแบบของ API Key ไม่ถูกต้อง หรือ Key ไม่ถูกต้อง";
   }
 } else {
-  console.warn("Gemini API key not found or configured. AI features will be disabled.");
+  console.warn("Gemini API key not found in process.env.API_KEY. AI features will be disabled.");
+  initError = "คุณสมบัตินี้ต้องใช้ API Key ที่ตั้งค่าไว้ในระบบ";
 }
 
 
 export const generateDescription = async (businessName: string, category: string): Promise<string> => {
-  // Check for both the initialized 'ai' instance and the API_KEY
-  if (!ai || !API_KEY) {
-    // This specific error message will be caught and displayed to the user in the form.
-    return Promise.reject(new Error("คุณสมบัตินี้ต้องใช้ API Key ที่ตั้งค่าไว้ในระบบ"));
+  // Check for initialization errors or a missing 'ai' instance.
+  if (initError || !ai) {
+    return Promise.reject(new Error(initError || "ไม่สามารถเริ่มต้นระบบ AI ได้"));
   }
 
   const prompt = `ในฐานะผู้เชี่ยวชาญด้านการตลาด, ช่วยเขียนคำอธิบายธุรกิจสั้นๆ ที่น่าสนใจและดูเป็นมืออาชีพสำหรับธุรกิจชื่อ "${businessName}" ซึ่งอยู่ในหมวดหมู่ "${category}" ให้มีความยาวประมาณ 2-3 ประโยค เน้นความเป็นมิตรและเชิญชวนลูกค้า`;
@@ -42,15 +45,16 @@ export const generateDescription = async (businessName: string, category: string
     return response.text.trim();
   } catch (error) {
     console.error("Error generating description with Gemini:", error);
-    throw new Error("ไม่สามารถสร้างคำอธิบายได้ กรุณาลองใหม่อีกครั้ง");
+    throw new Error("ไม่สามารถสร้างคำอธิบายได้ กรุณาลองใหม่อีกครั้ง หรือตรวจสอบ API Key");
   }
 };
 
 export const geocodeAddress = async (address: string): Promise<{ lat: number; lng: number } | null> => {
-  if (!ai || !API_KEY) {
-    console.warn("Geocoding disabled: Gemini API key not configured.");
+  if (initError || !ai) {
+    console.warn("Geocoding disabled: Gemini AI client not initialized.");
     return null;
   }
+  
   const cleanedAddress = address.trim().replace(/\s+/g, ' ');
   if (!cleanedAddress) return null;
 
