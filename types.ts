@@ -6,6 +6,7 @@ export enum BusinessCategory {
   SERVICE = "บริการ",
   TECHNOLOGY = "เทคโนโลยี",
   HEALTH = "สุขภาพและความงาม",
+  AUTOMOBILE = "รถยนต์",
   OTHER = "อื่นๆ",
   FREELANCE = "ฟรีแลนซ์/ผู้เชี่ยวชาญ"
 }
