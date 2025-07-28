@@ -9,6 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
       body {
         font-family: 'Sarabun', sans-serif;
@@ -22,6 +24,16 @@
         position: absolute;
         white-space: nowrap;
         width: 1px;
+      }
+      .leaflet-popup-content-wrapper {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      }
+      .leaflet-popup-content {
+        margin: 12px;
+      }
+      .leaflet-popup-tip {
+        border-radius: 0;
       }
     </style>
   <script type="importmap">
