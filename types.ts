@@ -21,10 +21,12 @@ export interface AlumniProfile {
   publicContact?: string;
   website?: string;
   location?: string;
+  latitude?: number;
+  longitude?: number;
   profileImage?: string;
 }
 
 // New type for the form submission payload
-export interface AlumniFormData extends Omit<AlumniProfile, 'id' | 'profileImage'> {
+export interface AlumniFormData extends Omit<AlumniProfile, 'id' | 'profileImage' | 'latitude' | 'longitude'> {
     imageBase64: string | null; // Base64 encoded image string
 }

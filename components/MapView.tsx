@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { AlumniProfile } from '../types';
-import { geocodeAddress } from '../services/geminiService';
 
 // Add a declaration for the Leaflet global object
 declare const L: any;
@@ -10,59 +9,33 @@ interface MapViewProps {
   onProfileSelect: (profile: AlumniProfile) => void;
 }
 
-interface Coords {
-  lat: number;
-  lng: number;
-}
-
 const MapView: React.FC<MapViewProps> = ({ profiles, onProfileSelect }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null); // To hold the map instance
-  const [geocodedProfiles, setGeocodedProfiles] = useState<Map<string, Coords | null>>(new Map());
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const geocodeAll = async () => {
-      setIsLoading(true);
-      const profilesWithLocation = profiles.filter(p => p.location && p.location.trim() !== 'ออนไลน์' && p.location.trim() !== '');
-      const newGeocodedProfiles = new Map<string, Coords | null>();
-
-      await Promise.all(profilesWithLocation.map(async (profile) => {
-        if (!geocodedProfiles.has(profile.id)) { // Geocode only if not already cached
-            const coords = await geocodeAddress(profile.location!);
-            newGeocodedProfiles.set(profile.id, coords);
-        } else {
-            newGeocodedProfiles.set(profile.id, geocodedProfiles.get(profile.id)!);
-        }
-      }));
-
-      setGeocodedProfiles(newGeocodedProfiles);
-      setIsLoading(false);
-    };
-
-    geocodeAll();
-  }, [profiles]);
-
-  useEffect(() => {
+    // Initialize map only once
     if (!mapContainer.current || mapRef.current) return;
 
-    mapRef.current = L.map(mapContainer.current).setView([13.7563, 100.5018], 6);
+    mapRef.current = L.map(mapContainer.current).setView([13.7563, 100.5018], 6); // Default view of Thailand
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(mapRef.current);
 
+    // Cleanup function to remove map on component unmount
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
         mapRef.current = null;
       }
     };
-  }, []);
+  }, []); // Empty dependency array ensures this runs only once
 
   useEffect(() => {
-    if (!mapRef.current || isLoading) return;
+    if (!mapRef.current) return;
 
+    // Clear existing markers
     mapRef.current.eachLayer((layer: any) => {
       if (layer instanceof L.Marker) {
         mapRef.current.removeLayer(layer);
@@ -72,9 +45,10 @@ const MapView: React.FC<MapViewProps> = ({ profiles, onProfileSelect }) => {
     const markerGroup: any[] = [];
 
     profiles.forEach(profile => {
-      const coords = geocodedProfiles.get(profile.id);
-      if (coords) {
-        const marker = L.marker([coords.lat, coords.lng]);
+      // Use latitude and longitude directly from the profile data
+      // Check for non-null and that they are numbers
+      if (profile.latitude != null && profile.longitude != null && !isNaN(profile.latitude) && !isNaN(profile.longitude)) {
+        const marker = L.marker([profile.latitude, profile.longitude]);
 
         const popupContent = `
           <div class="p-1 max-w-xs">
@@ -86,6 +60,7 @@ const MapView: React.FC<MapViewProps> = ({ profiles, onProfileSelect }) => {
         
         marker.bindPopup(popupContent);
         
+        // Add event listener to the popup button
         marker.on('popupopen', () => {
           const btn = document.getElementById(`view-details-${profile.id}`);
           if (btn) {
@@ -99,28 +74,23 @@ const MapView: React.FC<MapViewProps> = ({ profiles, onProfileSelect }) => {
 
     if (markerGroup.length > 0) {
       const group = L.featureGroup(markerGroup).addTo(mapRef.current);
+      // Adjust map view to fit all markers
       if (markerGroup.length > 1) {
           mapRef.current.fitBounds(group.getBounds().pad(0.2));
       } else {
+          // If only one marker, center on it with a closer zoom
           mapRef.current.setView(markerGroup[0].getLatLng(), 14);
       }
+    } else {
+        // If no markers, reset to default view of Thailand
+        mapRef.current.setView([13.7563, 100.5018], 6);
     }
 
-  }, [geocodedProfiles, isLoading, profiles, onProfileSelect]);
+  }, [profiles, onProfileSelect]); // Rerun when profiles change
 
   return (
-    <div className="relative container mx-auto px-4 pb-8">
-        <div className="relative" style={{ height: 'calc(100vh - 280px)', minHeight: '500px' }}>
-            {isLoading && (
-                <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-10 rounded-lg">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-green-700 mx-auto"></div>
-                    <p className="mt-4 text-lg font-semibold text-gray-700">กำลังค้นหาตำแหน่งบนแผนที่ด้วย AI...</p>
-                </div>
-                </div>
-            )}
-            <div ref={mapContainer} className="w-full h-full rounded-lg shadow-lg z-0" />
-        </div>
+    <div className="container mx-auto px-4 pb-8">
+        <div ref={mapContainer} style={{ height: 'calc(100vh - 280px)', minHeight: '500px' }} className="w-full h-full rounded-lg shadow-lg bg-gray-200" />
     </div>
   );
 };

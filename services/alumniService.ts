@@ -27,14 +27,14 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySFzRhZjbvDM
 // =====================================================================================
 // หมายเหตุสำหรับนักพัฒนา (Backend/Google Apps Script):
 // =====================================================================================
-// เนื่องจากตอนนี้สามารถเลือกได้หลายหมวดหมู่ (Category) ข้อมูลที่ส่งจากฟอร์มในส่วน `category`
-// จะเป็น Array ของ String (เช่น ["อาหารและเครื่องดื่ม", "บริการ"])
-//
-// ใน Google Apps Script:
-// 1. เมื่อรับข้อมูล (doPost): ให้แปลง Array นี้เป็น String ที่คั่นด้วยจุลภาค (comma)
-//    ก่อนบันทึกลงในชีต เช่น `categories.join(',')`
-// 2. เมื่อส่งข้อมูล (doGet): ให้อ่าน String จากชีต แล้วแปลงกลับเป็น Array ด้วยการ
-//    `split(',')` ก่อนส่งกลับมาเป็น JSON
+// 1. การเลือกหลายหมวดหมู่ (Category):
+//    - เมื่อรับข้อมูล (doPost): ข้อมูล `category` จะเป็น Array ของ String (เช่น ["อาหาร", "บริการ"])
+//      ให้แปลงเป็น String ที่คั่นด้วยจุลภาค (`,`) ก่อนบันทึกลงชีต เช่น `categories.join(',')`
+//    - เมื่อส่งข้อมูล (doGet): ให้อ่าน String จากชีต แล้วแปลงกลับเป็น Array ด้วย `split(',')`
+//      ก่อนส่งกลับมาเป็น JSON
+// 2. แผนที่ (MapView):
+//    - เพื่อให้แผนที่ทำงานโดยไม่ง้อ AI, Google Sheet ควรมีคอลัมน์ `latitude` และ `longitude`
+//      สำหรับเก็บข้อมูลพิกัด หากไม่มีข้อมูลนี้ กิจการจะไม่ถูกปักหมุดบนแผนที่
 // =====================================================================================
 
 
@@ -50,6 +50,8 @@ const MOCK_ALUMNI_DATA: AlumniProfile[] = [
         publicContact: '081-234-5678',
         website: 'https://facebook.com/santichonfood',
         location: '123 ถนนลาดพร้าว, กรุงเทพมหานคร',
+        latitude: 13.8139,
+        longitude: 100.5723,
         profileImage: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=400',
     },
     {
@@ -92,9 +94,13 @@ export const getAlumni = async (): Promise<AlumniProfile[]> => {
     // Transform category string from sheet (e.g., "Cat1,Cat2") into an array
     const transformedData = data.map((profile: any) => ({
         ...profile,
+        // Convert comma-separated string from sheet to array
         category: typeof profile.category === 'string' 
             ? profile.category.split(',').map((c: string) => c.trim()).filter(Boolean) 
-            : Array.isArray(profile.category) ? profile.category : []
+            : Array.isArray(profile.category) ? profile.category : [],
+        // Ensure latitude and longitude are numbers
+        latitude: profile.latitude ? parseFloat(profile.latitude) : undefined,
+        longitude: profile.longitude ? parseFloat(profile.longitude) : undefined,
     }));
 
     return transformedData as AlumniProfile[];

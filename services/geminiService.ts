@@ -1,55 +1,50 @@
-// This service now acts as a client to our own backend API proxy.
-// It does not interact with the Gemini API directly, ensuring API keys are kept secret.
+import { GoogleGenAI } from "@google/genai";
 
-const callApi = async (type: string, payload: any) => {
-    try {
-        const response = await fetch('/api/gemini', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ type, payload }),
-        });
+// Based on the environment requirements, we must assume process.env.API_KEY is available.
+// The check for `typeof process` is removed to align with this requirement.
+const API_KEY = process.env.API_KEY;
 
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ error: 'An unknown error occurred on the server.' }));
-            // Use the specific error from the server if available
-            throw new Error(errorData.error || `Server responded with status ${response.status}`);
-        }
-        
-        // Return the JSON body from the successful response
-        return await response.json();
-    } catch (error: any) {
-        console.error(`Error calling our API proxy for type "${type}":`, error);
-        // Propagate a user-friendly error message
-        throw new Error(`ไม่สามารถเชื่อมต่อกับบริการ AI ได้: ${error.message}`);
-    }
-};
+let ai: GoogleGenAI | null = null;
+let initError: string | null = null;
+
+// Initialize the AI client. If API_KEY is missing or invalid, capture the error.
+if (API_KEY) {
+  try {
+    // The apiKey must be a non-empty string.
+    ai = new GoogleGenAI({ apiKey: API_KEY });
+  } catch (error) {
+    console.error("Failed to initialize GoogleGenAI, likely due to an invalid API key format:", error);
+    initError = "รูปแบบของ API Key ไม่ถูกต้อง หรือ Key ไม่ถูกต้อง";
+  }
+} else {
+  console.warn("Gemini API key not found in process.env.API_KEY. AI features will be disabled.");
+  initError = "คุณสมบัตินี้ต้องใช้ API Key ที่ตั้งค่าไว้ในระบบ";
+}
+
 
 export const generateDescription = async (businessName: string, category: string): Promise<string> => {
-    const data = await callApi('generateDescription', { businessName, category });
-    if (typeof data.text !== 'string') {
-        throw new Error('Received invalid response from AI service.');
-    }
-    return data.text;
-};
+  // Check for initialization errors or a missing 'ai' instance.
+  if (initError || !ai) {
+    return Promise.reject(new Error(initError || "ไม่สามารถเริ่มต้นระบบ AI ได้"));
+  }
 
-export const geocodeAddress = async (address: string): Promise<{ lat: number; lng: number } | null> => {
-    try {
-        const data = await callApi('geocodeAddress', { address });
-        // The API can return null, which is a valid and expected response for un-geocodeable addresses.
-        if (data === null) {
-            return null;
-        }
-        // Validate the structure of the returned object
-        if (data && typeof data.lat === 'number' && typeof data.lng === 'number') {
-            return data;
-        }
-        console.warn(`Received invalid geocode data for address "${address}":`, data);
-        return null;
-    } catch(error) {
-        // Log the error but return null to prevent the whole map from failing
-        console.error(`Error geocoding address "${address}" via proxy:`, error);
-        return null;
-    }
+  const prompt = `ในฐานะผู้เชี่ยวชาญด้านการตลาด, ช่วยเขียนคำอธิบายธุรกิจสั้นๆ ที่น่าสนใจและดูเป็นมืออาชีพสำหรับธุรกิจชื่อ "${businessName}" ซึ่งอยู่ในหมวดหมู่ "${category}" ให้มีความยาวประมาณ 2-3 ประโยค เน้นความเป็นมิตรและเชิญชวนลูกค้า`;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+      config: {
+        temperature: 0.7,
+        topP: 1,
+        topK: 32,
+        maxOutputTokens: 200,
+        thinkingConfig: { thinkingBudget: 100 }
+      }
+    });
+    return response.text.trim();
+  } catch (error) {
+    console.error("Error generating description with Gemini:", error);
+    throw new Error("ไม่สามารถสร้างคำอธิบายได้ กรุณาลองใหม่อีกครั้ง หรือตรวจสอบ API Key");
+  }
 };
