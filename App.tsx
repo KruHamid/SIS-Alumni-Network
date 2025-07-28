@@ -8,8 +8,6 @@ import Footer from './components/Footer';
 import AlumniDetailView from './components/AlumniDetailView';
 import { AlumniProfile, BusinessCategory } from './types';
 import { getAlumni } from './services/alumniService';
-import ViewToggle from './components/ViewToggle';
-import MapView from './components/MapView';
 
 const LoadingSpinner: React.FC = () => (
     <div className="flex items-center justify-center h-screen">
@@ -35,7 +33,6 @@ const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<AlumniProfile | null>(null);
-  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   
   useEffect(() => {
     const fetchData = async () => {
@@ -82,21 +79,11 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header onAddBusinessClick={() => setIsFormOpen(true)} />
       <main className="flex-grow">
-        <div className="container mx-auto px-4 py-4">
-            <div className="flex justify-end items-center">
-                <ViewToggle viewMode={viewMode} setViewMode={setViewMode} />
-            </div>
-        </div>
-
         <CategoryFilter
           selectedCategory={selectedCategory}
           onSelectCategory={setSelectedCategory}
         />
-
-        {viewMode === 'list' && <AlumniList profiles={filteredProfiles} onProfileSelect={handleProfileSelect} />}
-        
-        {viewMode === 'map' && <MapView profiles={filteredProfiles} onProfileSelect={handleProfileSelect} />}
-
+        <AlumniList profiles={filteredProfiles} onProfileSelect={handleProfileSelect} />
       </main>
       <Footer />
 

@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 export const UserIcon = ({ className }: { className?: string }) => (
@@ -37,12 +38,6 @@ export const LockClosedIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export const SparklesIcon = ({ className }: { className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
-    </svg>
-);
-
 export const AcademicCapIcon = ({ className }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5z" />
@@ -57,6 +52,6 @@ export const ListBulletIcon = ({ className }: { className?: string }) => (
 
 export const MapIcon = ({ className }: { className?: string }) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503-12.495 1.25-1.25a.75.75 0 0 1 1.06 0l2.5 2.5a.75.75 0 0 1 0 1.06l-1.25 1.25m-11.25-.51L3.75 7.5a.75.75 0 0 1 0-1.06l2.5-2.5a.75.75 0 0 1 1.06 0l1.25 1.25m-6.25 5.63 2.5 2.5a.75.75 0 0 0 1.06 0l2.5-2.5m-8.75 3.375a.75.75 0 0 0 1.06 0l2.5-2.5a.75.75 0 0 0 0-1.06l-2.5-2.5a.75.75 0 0 0-1.06 0l-2.5 2.5a.75.75 0 0 0 0 1.06l2.5 2.5Z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.426-.242-.815-.622-1.006l-4.875-2.438a1.875 1.875 0 0 0-1.618 0L9.497 3.814a1.875 1.875 0 0 0-.997 1.618v10.5c0 .633.434 1.17.997 1.353l4.006 1.82a1.875 1.875 0 0 0 1.618 0Z" />
     </svg>
 );

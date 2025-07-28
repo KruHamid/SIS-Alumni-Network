@@ -32,9 +32,9 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySFzRhZjbvDM
 //      ให้แปลงเป็น String ที่คั่นด้วยจุลภาค (`,`) ก่อนบันทึกลงชีต เช่น `categories.join(',')`
 //    - เมื่อส่งข้อมูล (doGet): ให้อ่าน String จากชีต แล้วแปลงกลับเป็น Array ด้วย `split(',')`
 //      ก่อนส่งกลับมาเป็น JSON
-// 2. แผนที่ (MapView):
-//    - เพื่อให้แผนที่ทำงานโดยไม่ง้อ AI, Google Sheet ควรมีคอลัมน์ `latitude` และ `longitude`
-//      สำหรับเก็บข้อมูลพิกัด หากไม่มีข้อมูลนี้ กิจการจะไม่ถูกปักหมุดบนแผนที่
+// 2. ละติจูด/ลองจิจูด (Latitude/Longitude):
+//    - ใน Google Sheet ให้สร้างคอลัมน์ `latitude` และ `longitude` เพื่อเก็บข้อมูลพิกัด
+//    - Apps Script ควรอ่านค่าจากคอลัมน์เหล่านี้และส่งกลับมาเป็น Number
 // =====================================================================================
 
 
@@ -50,9 +50,9 @@ const MOCK_ALUMNI_DATA: AlumniProfile[] = [
         publicContact: '081-234-5678',
         website: 'https://facebook.com/santichonfood',
         location: '123 ถนนลาดพร้าว, กรุงเทพมหานคร',
-        latitude: 13.8139,
-        longitude: 100.5723,
         profileImage: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=400',
+        latitude: 13.7949,
+        longitude: 100.5704,
     },
     {
         id: '2',

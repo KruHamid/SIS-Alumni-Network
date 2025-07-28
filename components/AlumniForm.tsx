@@ -1,9 +1,7 @@
 
 import React, { useState } from 'react';
 import { BusinessCategory, AlumniFormData } from '../types';
-import { generateDescription } from '../services/geminiService';
 import { addAlumni } from '../services/alumniService';
-import { SparklesIcon } from './IconComponents';
 
 interface AlumniFormProps {
   onClose: () => void;
@@ -37,10 +35,8 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isGenerating, setIsGenerating] = useState(false);
   const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'submitting' | 'error' | 'success'>('idle');
   const [submissionError, setSubmissionError] = useState('');
-  const [geminiError, setGeminiError] = useState('');
   const [imageError, setImageError] = useState('');
   
   const MAX_FILE_SIZE_MB = 2;
@@ -123,25 +119,6 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
     }
   };
 
-  const handleGenerateDescription = async () => {
-    if (!formData.businessName || formData.category.length === 0) {
-      setGeminiError('กรุณากรอกชื่อกิจการและเลือกประเภทก่อน');
-      return;
-    }
-    setIsGenerating(true);
-    setGeminiError('');
-    try {
-      const categoryText = formData.category.join(', ');
-      const description = await generateDescription(formData.businessName, categoryText);
-      setFormData(prev => ({...prev, description}));
-    } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : "เกิดข้อผิดพลาดที่ไม่รู้จัก";
-        setGeminiError(errorMessage);
-    } finally {
-      setIsGenerating(false);
-    }
-  }
-
   if (submissionStatus === 'success') {
     return <SuccessView onClose={onClose} />
   }
@@ -185,16 +162,9 @@ const AlumniForm: React.FC<AlumniFormProps> = ({ onClose }) => {
         {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
       </div>
       <div>
-        <div className="flex justify-between items-center">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">คำอธิบายกิจการ*</label>
-            <button type="button" onClick={handleGenerateDescription} disabled={isGenerating} className="flex items-center gap-1 text-sm text-green-700 hover:text-green-900 disabled:opacity-50 disabled:cursor-wait">
-                <SparklesIcon className="w-4 h-4" />
-                {isGenerating ? 'กำลังสร้าง...' : 'AI ช่วยเขียน'}
-            </button>
-        </div>
+        <label htmlFor="description" className="block text-sm font-medium text-gray-700">คำอธิบายกิจการ*</label>
         <textarea name="description" id="description" rows={4} value={formData.description} onChange={handleChange} className={`mt-1 block w-full p-2 border rounded-md shadow-sm ${errors.description ? 'border-red-500' : 'border-gray-300'}`}></textarea>
         {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
-        {geminiError && <p className="text-red-500 text-xs mt-1">{geminiError}</p>}
       </div>
 
        <div>

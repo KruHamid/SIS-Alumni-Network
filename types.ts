@@ -21,9 +21,9 @@ export interface AlumniProfile {
   publicContact?: string;
   website?: string;
   location?: string;
+  profileImage?: string;
   latitude?: number;
   longitude?: number;
-  profileImage?: string;
 }
 
 // New type for the form submission payload
