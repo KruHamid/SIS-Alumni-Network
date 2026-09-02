@@ -1,43 +1,1905 @@
 <!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>เครือข่ายกิจการศิษย์เก่าสันติชน</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-      body {
-        font-family: 'Sarabun', sans-serif;
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เครือข่ายธุรกิจและทำเนียบศิษย์เก่า โรงเรียนอิสลามสันติชน</title>
+  
+  <!-- Google Fonts: Sarabun & Prompt -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Sarabun', 'sans-serif'],
+            display: ['Prompt', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              800: '#065f46',
+              900: '#064e3b',
+            },
+            gold: {
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+            }
+          }
+        }
       }
-      /* Hide the default file input */
-      .hidden-file-input {
-        clip: rect(0 0 0 0);
-        clip-path: inset(50%);
-        height: 1px;
-        overflow: hidden;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
-      }
-    </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
-    "react/": "https://esm.sh/react@^19.1.0/",
-    "react": "https://esm.sh/react@^19.1.0",
-    "@google/genai": "https://esm.sh/@google/genai@^1.11.0"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Prompt', sans-serif;
+    }
+    .hero-pattern {
+      background-color: #064e3b;
+      background-image: radial-gradient(#10b981 0.75px, transparent 0.75px), radial-gradient(#10b981 0.75px, #064e3b 0.75px);
+      background-size: 30px 30px;
+      background-position: 0 0, 15px 15px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .dice-spin {
+      animation: spinDice 0.6s ease-in-out;
+    }
+    @keyframes spinDice {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.2); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+  </style>
 </head>
-  <body class="bg-gray-50">
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo & Title -->
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateToTab('business')">
+          <div class="w-11 h-11 rounded-xl bg-white p-1 border border-slate-200/90 shadow-sm flex items-center justify-center overflow-hidden flex-shrink-0 hover:shadow transition">
+            <img 
+              src="https://img2.pic.in.th/logosis---Edited.th.png" 
+              alt="โลโก้โรงเรียนอิสลามสันติชน" 
+              class="w-full h-full object-contain"
+              onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full bg-emerald-700 flex items-center justify-center text-white font-bold text-xs rounded-lg\'>อสช</div>';"
+            >
+          </div>
+          <div>
+            <span class="font-display font-bold text-base sm:text-lg text-slate-800 tracking-tight leading-tight block">เครือข่ายธุรกิจศิษย์เก่า</span>
+            <span class="text-[11px] sm:text-xs text-brand-600 font-medium block">โรงเรียนอิสลามสันติชน (Santichon Alumni Hub)</span>
+          </div>
+        </div>
+
+        <!-- Navigation Tabs (Desktop) -->
+        <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <button onclick="navigateToTab('business')" id="nav-business" class="nav-btn px-3.5 py-2 rounded-lg text-sm font-medium transition text-brand-700 bg-brand-50">
+            <i class="fa-solid fa-store mr-1.5 text-brand-600"></i> ธุรกิจศิษย์เก่า
+          </button>
+          
+          <button onclick="requestAdminAccess('directory')" id="nav-directory" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center gap-1.5">
+            <i class="fa-solid fa-users text-slate-400"></i>
+            <span>ทำเนียบศิษย์เก่า</span>
+            <i id="lock-directory" class="fa-solid fa-lock text-xs text-amber-500 ml-0.5"></i>
+          </button>
+          
+          <button onclick="navigateToTab('wisdom')" id="nav-wisdom" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center gap-1.5">
+            <i class="fa-solid fa-lightbulb text-slate-400"></i>
+            <span>แนวทาง & ข้อคิด</span>
+          </button>
+          
+          <button onclick="requestAdminAccess('stats')" id="nav-stats" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center gap-1.5">
+            <i class="fa-solid fa-chart-pie text-slate-400"></i>
+            <span>สถิติข้อมูล</span>
+            <i id="lock-stats" class="fa-solid fa-lock text-xs text-amber-500 ml-0.5"></i>
+          </button>
+        </nav>
+
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <!-- Admin Status Toggle -->
+          <div id="adminStatusContainer">
+            <button onclick="openAdminModal()" id="btnOpenAdmin" class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300/80 transition">
+              <i class="fa-solid fa-shield-halved text-amber-500 mr-1.5"></i>
+              <span>รหัสแอดมิน</span>
+            </button>
+            <div id="adminLoggedInBadge" class="hidden items-center gap-2">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-300">
+                <i class="fa-solid fa-crown mr-1.5 text-amber-600"></i> แอดมิน
+              </span>
+              <button onclick="logoutAdmin()" title="ออกจากระบบแอดมิน" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition text-xs">
+                <i class="fa-solid fa-right-from-bracket"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Register Modal Trigger -->
+          <button onclick="openModal('formModal')" class="inline-flex items-center px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-brand-700 hover:from-emerald-700 hover:to-brand-800 shadow-sm hover:shadow transition-all transform hover:-translate-y-0.5">
+            <i class="fa-solid fa-user-plus mr-1.5"></i>
+            <span>ลงทะเบียน</span>
+          </button>
+          
+          <!-- Mobile Menu Button -->
+          <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus:outline-none">
+            <i class="fa-solid fa-bars text-xl"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-200 bg-white px-4 pt-2 pb-3 space-y-1">
+      <button onclick="navigateToTab('business'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-brand-700 bg-brand-50">
+        <i class="fa-solid fa-store w-6"></i> ธุรกิจศิษย์เก่า
+      </button>
+      <button onclick="requestAdminAccess('directory'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center justify-between">
+        <span><i class="fa-solid fa-users w-6"></i> ทำเนียบศิษย์เก่า</span>
+        <i class="fa-solid fa-lock text-xs text-amber-500"></i>
+      </button>
+      <button onclick="navigateToTab('wisdom'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center justify-between">
+        <span><i class="fa-solid fa-lightbulb w-6"></i> แนวทาง & ข้อคิด</span>
+      </button>
+      <button onclick="requestAdminAccess('stats'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center justify-between">
+        <span><i class="fa-solid fa-chart-pie w-6"></i> สถิติข้อมูล</span>
+        <i class="fa-solid fa-lock text-xs text-amber-500"></i>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero-pattern text-white relative py-9 px-4 sm:px-6 lg:px-8 border-b border-emerald-900/40">
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="space-y-2 text-center md:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-800/80 border border-emerald-600/50 text-emerald-200 text-xs font-medium backdrop-blur">
+            <i class="fa-solid fa-bag-shopping text-gold-400"></i> สันติชนคอมมูนิตี้ • สนับสนุนธุรกิจศิษย์เก่า
+          </div>
+          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white font-display">
+            เครือข่ายธุรกิจ & กิจการ ศิษย์เก่าอิสลามสันติชน
+          </h1>
+          <p class="text-emerald-100/90 text-xs sm:text-sm max-w-2xl font-light">
+            หน้าแรกแสดงเฉพาะกิจการของพี่น้องศิษย์เก่า โดยระบบจะทำการสุ่มลำดับการแสดงผลเพื่อเปิดโอกาสในการมองเห็นให้แก่ทุกธุรกิจอย่างเท่าเทียม
+          </p>
+        </div>
+        
+        <!-- Randomize & Count Action Box -->
+        <div class="flex flex-wrap items-center justify-center md:justify-end gap-3 w-full md:w-auto">
+          <button onclick="shuffleBusinesses(true)" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gold-500 hover:bg-gold-600 text-slate-900 font-semibold text-xs sm:text-sm shadow-md hover:shadow-lg transition-all transform active:scale-95">
+            <i id="diceIcon" class="fa-solid fa-shuffle text-slate-900"></i>
+            <span>สุ่มลำดับธุรกิจใหม่</span>
+          </button>
+          
+          <div class="bg-emerald-900/80 backdrop-blur border border-emerald-700/60 rounded-xl px-4 py-2 text-center">
+            <span id="hero-biz-count" class="block text-xl font-bold font-display text-emerald-300">0</span>
+            <span class="text-[11px] text-emerald-200">ธุรกิจที่เปิดแสดง</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- ========================================== -->
+    <!-- TAB 1 (DEFAULT HOME): BUSINESS SHOWCASE   -->
+    <!-- ========================================== -->
+    <div id="tab-business" class="tab-content space-y-6">
+      
+      <!-- Search & Randomizer Bar for Businesses -->
+      <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm flex flex-col sm:flex-row gap-3 justify-between items-center">
+        <div class="relative w-full sm:w-80">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <input 
+            type="text" 
+            id="bizSearchInput" 
+            placeholder="ค้นหาชื่อธุรกิจ, สินค้า, หรือเจ้าของกิจการ..." 
+            class="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition"
+            oninput="filterBusinesses()"
+          >
+          <button id="clearBizSearchBtn" onclick="clearBizSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <div class="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-3 text-xs text-slate-500">
+          <div id="bizCountLabel">กำลังโหลดข้อมูลธุรกิจ...</div>
+          <button onclick="shuffleBusinesses(true)" title="สุ่มลำดับร้านค้าใหม่" class="p-2 text-slate-600 hover:text-brand-600 hover:bg-slate-100 rounded-lg transition border border-slate-200">
+            <i class="fa-solid fa-rotate text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Business Grid -->
+      <div id="businessGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+      <!-- Empty Businesses State -->
+      <div id="emptyBizState" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-8">
+        <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+          <i class="fa-solid fa-store-slash"></i>
+        </div>
+        <h3 class="text-base font-semibold text-slate-700 mb-1">ไม่พบธุรกิจตามคำค้นหา</h3>
+        <p class="text-xs text-slate-500 mb-4">ลองค้นหาด้วยคำอื่น หรือคลิกปุ่มด้านล่างเพื่อล้างการค้นหา</p>
+        <button onclick="clearBizSearch()" class="px-4 py-2 bg-brand-600 text-white text-xs font-medium rounded-xl hover:bg-brand-700 transition">
+          แสดงธุรกิจทั้งหมด
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: ALUMNI DIRECTORY (ADMIN LOCKED)     -->
+    <!-- ========================================== -->
+    <div id="tab-directory" class="tab-content hidden space-y-6">
+      
+      <!-- Admin Notice Banner -->
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between text-xs sm:text-sm text-amber-900">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-solid fa-user-shield text-base text-amber-600"></i>
+          <span>คุณกำลังอยู่ใน <strong>โหมดผู้ดูแลระบบ (Admin)</strong> สามารถดูข้อมูลส่วนตัว ทำเนียบ และส่งออกรายชื่อได้</span>
+        </div>
+        <button onclick="logoutAdmin()" class="px-3 py-1 bg-white border border-amber-300 rounded-lg text-amber-800 hover:bg-amber-100 transition text-xs font-medium">
+          ออกจากโหมดแอดมิน
+        </button>
+      </div>
+
+      <!-- Filter & Search Controls Card -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-4">
+        <div class="flex flex-col lg:flex-row gap-4 justify-between items-stretch lg:items-center">
+          
+          <!-- Search Input -->
+          <div class="relative flex-1">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input 
+              type="text" 
+              id="searchInput" 
+              placeholder="ค้นหา: ชื่อ, ชื่ออาหรับ, สถาบัน, สาขา, เบอร์โทร, แผนการเรียน..." 
+              class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition"
+              oninput="filterAlumni()"
+            >
+            <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-sm">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <!-- Quick Filters Dropdowns -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
+            <select id="levelFilter" onchange="filterAlumni()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-700">
+              <option value="">ทุกระดับ (อิสลามสันติชน)</option>
+              <option value="ป.6">จบระดับ ป.6</option>
+              <option value="ม.3">จบระดับ ม.3</option>
+              <option value="ม.6">จบระดับ ม.6</option>
+            </select>
+
+            <select id="trackFilter" onchange="filterAlumni()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-700">
+              <option value="">ทุกแผนการเรียน</option>
+              <option value="วิทย์-คณิต">วิทย์-คณิต</option>
+              <option value="ศิลป์-คำนวณ">ศิลป์-คำนวณ</option>
+              <option value="ศิลป์-ภาษา">ศิลป์-ภาษา</option>
+              <option value="ศาสนา-สามัญ">ศาสนา-สามัญ</option>
+              <option value="อื่นๆ">อื่นๆ</option>
+            </select>
+
+            <select id="bizFilter" onchange="filterAlumni()" class="col-span-2 sm:col-span-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-700">
+              <option value="">ทั้งหมด (มี/ไม่มีธุรกิจ)</option>
+              <option value="yes">มีธุรกิจ/กิจการ</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Action bar: Count & Export -->
+        <div class="flex flex-wrap items-center justify-between border-t border-slate-100 pt-3 text-xs sm:text-sm text-slate-500 gap-2">
+          <div id="resultsCount">กำลังประมวลผลข้อมูล...</div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="exportToCSV()" class="inline-flex items-center px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition shadow-sm">
+              <i class="fa-solid fa-file-csv text-emerald-600 mr-1.5"></i> ดาวน์โหลด CSV (Excel)
+            </button>
+            <label class="cursor-pointer inline-flex items-center px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition shadow-sm">
+              <i class="fa-solid fa-file-import text-blue-600 mr-1.5"></i> นำเข้าไฟล์ CSV
+              <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="importCSVFile(this)">
+            </label>
+            <button onclick="openSheetsModal()" class="inline-flex items-center px-3 py-1.5 rounded-lg border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-medium transition shadow-sm">
+              <i class="fa-solid fa-table text-emerald-600 mr-1.5"></i> เชื่อมต่อ Google Sheet
+            </button>
+            <button onclick="printDirectory()" class="inline-flex items-center px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition shadow-sm">
+              <i class="fa-solid fa-print text-slate-600 mr-1.5"></i> พิมพ์ / PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alumni Card Grid -->
+      <div id="alumniGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="hidden text-center py-16 bg-white rounded-2xl border border-dashed border-slate-300 p-8">
+        <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+          <i class="fa-solid fa-user-slash"></i>
+        </div>
+        <h3 class="text-base font-semibold text-slate-700 mb-1">ไม่พบข้อมูลศิษย์เก่าที่ค้นหา</h3>
+        <p class="text-sm text-slate-500 mb-4">ลองปรับเปลี่ยนคำค้นหา หรือล้างตัวกรองเพื่อดูข้อมูลทั้งหมด</p>
+        <button onclick="resetFilters()" class="px-4 py-2 bg-brand-600 text-white text-xs font-medium rounded-xl hover:bg-brand-700 transition">
+          ล้างตัวกรองทั้งหมด
+        </button>
+      </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: WISDOM & ADVICE (ADMIN LOCKED)      -->
+    <!-- ========================================== -->
+    <div id="tab-wisdom" class="tab-content hidden space-y-6">
+      <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm text-center max-w-3xl mx-auto">
+        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl">
+          <i class="fa-solid fa-quote-left"></i>
+        </div>
+        <h2 class="text-xl font-bold font-display text-slate-800 mb-2">เสียงส่งต่อจากรุ่นพี่ถึงน้องๆ และเพื่อนร่วมรุ่น</h2>
+        <p class="text-slate-500 text-xs sm:text-sm">
+          รวบรวมประสบการณ์จริง ข้อคิด และแนวทางการดำเนินชีวิต การเรียน และการทำงานจากศิษย์เก่าโรงเรียนอิสลามสันติชน
+        </p>
+      </div>
+      <div id="wisdomGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: STATISTICS (ADMIN LOCKED)           -->
+    <!-- ========================================== -->
+    <div id="tab-stats" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 font-medium">ศิษย์เก่าที่ลงทะเบียน</p>
+              <h3 id="stat-total" class="text-2xl font-bold text-slate-800 font-display mt-1">0</h3>
+            </div>
+            <div class="w-11 h-11 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg">
+              <i class="fa-solid fa-user-graduate"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 font-medium">จบการศึกษาระดับ ม.6</p>
+              <h3 id="stat-m6" class="text-2xl font-bold text-emerald-600 font-display mt-1">0</h3>
+            </div>
+            <div class="w-11 h-11 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-lg">
+              <i class="fa-solid fa-school"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 font-medium">มีธุรกิจ/กิจการส่วนตัว</p>
+              <h3 id="stat-biz" class="text-2xl font-bold text-amber-600 font-display mt-1">0</h3>
+            </div>
+            <div class="w-11 h-11 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-lg">
+              <i class="fa-solid fa-briefcase"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 font-medium">สถาบันอุดมศึกษาที่ศึกษา</p>
+              <h3 id="stat-unis" class="text-2xl font-bold text-indigo-600 font-display mt-1">0</h3>
+            </div>
+            <div class="w-11 h-11 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-lg">
+              <i class="fa-solid fa-building-columns"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Distribution charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <h3 class="font-display font-bold text-slate-800 text-base mb-4 flex items-center">
+            <i class="fa-solid fa-chart-column text-brand-600 mr-2"></i> สัดส่วนระดับจบการศึกษาสูงสุดของ รร.
+          </h3>
+          <div id="statLevelBars" class="space-y-3 text-sm"></div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+          <h3 class="font-display font-bold text-slate-800 text-base mb-4 flex items-center">
+            <i class="fa-solid fa-layer-group text-brand-600 mr-2"></i> สัดส่วนแผนการเรียน (ระดับ ม.6)
+          </h3>
+          <div id="statTrackBars" class="space-y-3 text-sm"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL: ADMIN PASSWORD AUTHENTICATION       -->
+  <!-- ========================================== -->
+  <div id="adminAuthModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-200 overflow-hidden transform transition-all p-6 text-center">
+      
+      <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+
+      <h3 class="font-display font-bold text-xl text-slate-800 mb-1">ยืนยันรหัสผู้ดูแลระบบ (Admin)</h3>
+      <p class="text-xs text-slate-500 mb-5 leading-relaxed">
+        ข้อมูลทำเนียบศิษย์เก่า, รายละเอียดส่วนบุคคล, ข้อคิด และสถิติ สงวนไว้เฉพาะผู้ดูแลระบบที่มีรหัสผ่านเท่านั้น
+      </p>
+
+      <form id="adminAuthForm" onsubmit="handleAdminAuth(event)" class="space-y-4">
+        <div class="text-left">
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">รหัสผ่านผู้ดูแลระบบ (10 หลัก)</label>
+          <div class="relative">
+            <input 
+              type="password" 
+              id="adminPinInput" 
+              placeholder="กรอกรหัสผ่าน 10 หลัก" 
+              required
+              class="w-full pl-4 pr-10 py-3 text-sm font-mono tracking-wider bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:bg-white focus:outline-none text-center text-lg"
+              autocomplete="off"
+            >
+            <button type="button" onclick="togglePasswordVisibility('adminPinInput')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-sm">
+              <i id="eyeIcon" class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <p id="adminAuthError" class="hidden text-xs text-red-600 mt-1.5 text-center font-medium"></p>
+        </div>
+
+        <div class="flex gap-2.5 pt-2">
+          <button type="button" onclick="closeAdminModal()" class="w-1/2 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-100 transition">
+            ยกเลิก
+          </button>
+          <button type="submit" class="w-1/2 py-2.5 rounded-xl text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 shadow transition">
+            เข้าสู่ระบบแอดมิน
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: GOOGLE SHEETS WEBHOOK SETUP         -->
+  <!-- ========================================== -->
+  <div id="sheetsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden p-6 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-table"></i>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-slate-800 text-base">เชื่อมต่อฐานข้อมูล Google Sheets</h3>
+            <p class="text-xs text-slate-500">ส่งข้อมูลลงทะเบียนเข้า Google Sheet ทันทีแบบ Real-time</p>
+          </div>
+        </div>
+        <button onclick="closeModal('sheetsModal')" class="text-slate-400 hover:text-slate-600 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-600">
+        <p>นำ <strong>Web App URL</strong> ที่ได้จาก Google Apps Script (ดูขั้นตอนด้านล่าง) มาวางในช่องนี้:</p>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Google Apps Script Web App URL</label>
+          <input 
+            type="url" 
+            id="inputSheetsUrl" 
+            placeholder="https://script.google.com/macros/s/.../exec" 
+            class="w-full px-3.5 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none"
+          >
+        </div>
+        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100 space-y-1 text-emerald-900 text-[11px] leading-relaxed">
+          <p class="font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-circle-check text-emerald-600"></i> เมื่อตั้งค่าแล้ว:
+          </p>
+          <p>• เมื่อมีศิษย์เก่ากดบันทึก ข้อมูลทั้ง 15 รายการจะถูกส่งเข้า Google Sheet เป็นแถวใหม่ทันที</p>
+          <p>• คุณและทีมงานสามารถเปิดดูหรือจัดการข้อมูลผ่าน Google Sheet บนมือถือได้ตลอดเวลา</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+        <button type="button" onclick="closeModal('sheetsModal')" class="px-4 py-2 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-100 transition">
+          ปิด
+        </button>
+        <button type="button" onclick="saveSheetsUrl()" class="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 shadow transition">
+          บันทึกการเชื่อมต่อ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: REGISTRATION FORM (ALL 15 FIELDS)   -->
+  <!-- ========================================== -->
+  <div id="formModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto hidden">
+    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-8 max-h-[90vh] flex flex-col transform transition-all">
+      
+      <div class="px-6 py-4 bg-gradient-to-r from-emerald-800 to-brand-900 text-white flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-gold-400">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <div>
+            <h3 class="font-display font-bold text-base sm:text-lg leading-tight">แบบฟอร์มบันทึกข้อมูลศิษย์เก่า โรงเรียนอิสลามสันติชน</h3>
+            <p class="text-xs text-emerald-200">กรอกข้อมูลทั้ง 15 รายการเพื่อเผยแพร่ธุรกิจและทำเนียบ</p>
+          </div>
+        </div>
+        <button onclick="closeModal('formModal')" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-6">
+        <form id="alumniForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+          
+          <!-- SECTION 1: ข้อมูลส่วนตัวและประวัติในโรงเรียน -->
+          <div class="space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-3 py-1.5 rounded-lg flex items-center">
+              <i class="fa-solid fa-user mr-2"></i> หมวดที่ 1: ข้อมูลส่วนตัวและประวัติในโรงเรียน (ข้อ 1-3)
+            </h4>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">1. ชื่อ-สกุล <span class="text-red-500">*</span></label>
+                <input type="text" id="f_fullName" required placeholder="เช่น นายมูฮัมหมัด อาลี" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">2. ชื่ออาหรับ (พร้อมรุ่น/ปีที่จบ)</label>
+                <input type="text" id="f_arabicName" placeholder="เช่น محمد علي (Muhammad Ali)" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">ระดับจบการศึกษาสูงสุดของ รร. <span class="text-red-500">*</span></label>
+                <select id="f_maxLevel" required onchange="handleLevelChange(this.value)" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+                  <option value="ม.6">มัธยมศึกษาปีที่ 6 (ม.6)</option>
+                  <option value="ม.3">มัธยมศึกษาปีที่ 3 (ม.3)</option>
+                  <option value="ป.6">ประถมศึกษาปีที่ 6 (ป.6)</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">รุ่น หรือ ปี พ.ศ. ที่จบ</label>
+                <input type="text" id="f_batch" placeholder="เช่น รุ่น 15 (ปี 2561)" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">3. แผนการเรียน (กรณีจบ ม.6)</label>
+                <select id="f_track" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+                  <option value="วิทย์-คณิต">วิทย์-คณิต</option>
+                  <option value="ศิลป์-คำนวณ">ศิลป์-คำนวณ</option>
+                  <option value="ศิลป์-ภาษา">ศิลป์-ภาษา</option>
+                  <option value="ศาสนา-สามัญ">ศาสนา-สามัญ</option>
+                  <option value="-">ไม่ระบุ / จบระดับ ป.6 หรือ ม.3</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 2: ช่องทางการติดต่อ -->
+          <div class="space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-3 py-1.5 rounded-lg flex items-center">
+              <i class="fa-solid fa-address-book mr-2"></i> หมวดที่ 2: ช่องทางการติดต่อและโซเชียลมีเดีย (ข้อ 4-7)
+            </h4>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">4. เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
+                <input type="tel" id="f_phone" required placeholder="08x-xxx-xxxx" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">5. Facebook</label>
+                <input type="text" id="f_facebook" placeholder="ชื่อ Facebook หรือ URL ลิงก์" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">6. LINE ID</label>
+                <input type="text" id="f_line" placeholder="LINE ID ของคุณ" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">7. Instagram (IG)</label>
+                <input type="text" id="f_ig" placeholder="@username" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 3: ข้อมูลการศึกษาอุดมศึกษา -->
+          <div class="space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-3 py-1.5 rounded-lg flex items-center">
+              <i class="fa-solid fa-graduation-cap mr-2"></i> หมวดที่ 3: ประวัติการศึกษาหลังจบโรงเรียน (ข้อ 8-10)
+            </h4>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">8. ระดับการศึกษา</label>
+                <select id="f_educationDegree" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+                  <option value="ปริญญาตรี">ปริญญาตรี</option>
+                  <option value="ปริญญาโท">ปริญญาโท</option>
+                  <option value="ปริญญาเอก">ปริญญาเอก</option>
+                  <option value="ปวช./ปวส.">ปวช. / ปวส.</option>
+                  <option value="กำลังศึกษา">กำลังศึกษาต่อ</option>
+                  <option value="อื่นๆ">อื่นๆ</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">9. สาขาการศึกษา</label>
+                <input type="text" id="f_major" placeholder="เช่น วิศวกรรมศาสตร์, การตลาด" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">10. สถาบันที่จบการศึกษา</label>
+                <input type="text" id="f_university" placeholder="เช่น จุฬาฯ, มธ., ม.รามคำแหง" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 4: อาชีพและธุรกิจ (จะแสดงหน้าแรก) -->
+          <div class="space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-50 px-3 py-1.5 rounded-lg flex items-center">
+              <i class="fa-solid fa-store mr-2 text-amber-600"></i> หมวดที่ 4: อาชีพ ธุรกิจ/กิจการ (จะแสดงในหน้าแรก) (ข้อ 11-13)
+            </h4>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">11. อาชีพ / ชื่อธุรกิจ หรือ กิจการ</label>
+                <input type="text" id="f_businessName" placeholder="เช่น บจก. กรีนเทค, คาเฟ่ฮาลาล" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">12. ตำแหน่งในกิจการ</label>
+                <input type="text" id="f_position" placeholder="เช่น เจ้าของกิจการ, ผู้จัดการ, Co-Founder" class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none">
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">13. แนะนำกิจการ / สินค้าและบริการ</label>
+                <textarea id="f_businessDesc" rows="3" placeholder="อธิบายรายละเอียดกิจการ สินค้า บริการ หรือโปรโมชั่นพิเศษสำหรับศิษย์เก่า..." class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none"></textarea>
+              </div>
+
+              <div class="sm:col-span-2">
+                <label class="block text-xs font-semibold text-slate-700 mb-1">แนบภาพประกอบกิจการ/สินค้า (ไม่เกิน 2MB)</label>
+                <div class="flex items-center space-x-4">
+                  <label class="cursor-pointer inline-flex items-center px-4 py-2 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 transition shadow-sm">
+                    <i class="fa-solid fa-cloud-arrow-up mr-2 text-emerald-600"></i> เลือกรูปภาพ
+                    <input type="file" accept="image/*" class="hidden" onchange="previewImage(this, 'bizImagePreview')">
+                  </label>
+                  <div id="bizImagePreview" class="w-14 h-14 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center text-slate-300 overflow-hidden">
+                    <i class="fa-regular fa-image text-xl"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SECTION 5: แนวคิดและข้อคิดส่งต่อ -->
+          <div class="space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-3 py-1.5 rounded-lg flex items-center">
+              <i class="fa-solid fa-lightbulb mr-2"></i> หมวดที่ 5: ข้อคิดและแนวทางส่งต่อ (ข้อ 14-15)
+            </h4>
+
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                  14. สิ่งที่คิดว่าอยากส่งต่อหรือให้แนวทางกับน้องๆ
+                </label>
+                <textarea id="f_adviceJunior" rows="2" placeholder="เช่น การตั้งใจเรียน การเลือกสายอาชีพ ประสบการณ์ที่มีคุณค่า..." class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">
+                  15. ปัจจุบันสิ่งที่คิดว่าอยากส่งต่อหรือให้แนวทางกับเพื่อนร่วมรุ่น / ศิษย์เก่า โรงเรียนอิสลามสันติชน
+                </label>
+                <textarea id="f_adviceAlumni" rows="2" placeholder="เช่น การเกื้อกูลกันในสังคม ข้อคิดการทำงาน ความร่วมมือทางธุรกิจ..." class="w-full px-3.5 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:bg-white focus:outline-none"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- CSV Download Option upon Registration -->
+          <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex items-center space-x-3">
+            <input type="checkbox" id="f_autoDownloadCSV" checked class="w-4 h-4 text-emerald-600 rounded border-slate-300 focus:ring-emerald-500">
+            <label for="f_autoDownloadCSV" class="text-xs text-slate-700 select-none cursor-pointer">
+              <span class="font-semibold text-emerald-800">บันทึกและดาวน์โหลดสำเนาไฟล์ CSV อัตโนมัติ</span>
+              <span class="block text-[11px] text-slate-500">ระบบจะดาวน์โหลดไฟล์ CSV ประวัติของคุณไว้เป็นหลักฐานบนอุปกรณ์</span>
+            </label>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="pt-4 border-t border-slate-200 flex items-center justify-end space-x-3">
+            <button type="button" onclick="closeModal('formModal')" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100 transition">
+              ยกเลิก
+            </button>
+            <button type="submit" class="px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-emerald-600 to-brand-700 hover:from-emerald-700 hover:to-brand-800 shadow-md hover:shadow-lg transition">
+              <i class="fa-solid fa-floppy-disk mr-1.5"></i> บันทึกข้อมูลศิษย์เก่า
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: ALUMNI FULL DETAIL VIEW             -->
+  <!-- ========================================== -->
+  <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 overflow-y-auto hidden">
+    <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-8 max-h-[90vh] flex flex-col transform transition-all">
+      
+      <div class="relative bg-gradient-to-r from-brand-900 via-emerald-800 to-slate-900 p-6 text-white">
+        <button onclick="closeModal('detailModal')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+          <div id="detailAvatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-gold-500 to-amber-300 text-slate-900 flex items-center justify-center text-2xl font-bold font-display shadow-lg border-2 border-white/20">
+            A
+          </div>
+          <div class="text-center sm:text-left space-y-1">
+            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+              <span id="detailBadgeLevel" class="px-2.5 py-0.5 rounded-full bg-emerald-700/80 border border-emerald-500/50 text-[11px] font-medium text-emerald-100">
+                ม.6
+              </span>
+              <span id="detailBadgeTrack" class="px-2.5 py-0.5 rounded-full bg-white/15 text-[11px] font-medium text-slate-200">
+                วิทย์-คณิต
+              </span>
+            </div>
+            <h3 id="detailFullName" class="text-lg sm:text-xl font-bold font-display text-white">
+              ชื่อศิษย์เก่า
+            </h3>
+            <p id="detailArabicName" class="text-emerald-200 text-xs font-medium">
+              -
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="detailContent" class="p-6 overflow-y-auto custom-scrollbar space-y-5 text-sm"></div>
+
+      <div class="px-6 py-3 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+        <span>ข้อมูลศิษย์เก่า โรงเรียนอิสลามสันติชน</span>
+        <button onclick="closeModal('detailModal')" class="px-4 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium transition">
+          ปิดหน้าต่าง
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Alert -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="flex items-center space-x-3 px-4 py-3 bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700">
+      <div id="toastIcon" class="text-emerald-400 text-lg">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div id="toastMsg" class="text-xs sm:text-sm font-medium">
+        ข้อความแจ้งเตือน
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mt-auto bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-9 h-9 rounded-xl bg-white p-1 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm">
+          <img 
+            src="https://img2.pic.in.th/logosis---Edited.th.png" 
+            alt="โลโก้โรงเรียนอิสลามสันติชน" 
+            class="w-full h-full object-contain"
+            onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full bg-brand-700 flex items-center justify-center text-white font-bold text-xs rounded-lg\'>อสช</div>';"
+          >
+        </div>
+        <div>
+          <p class="text-slate-200 font-medium">เครือข่ายธุรกิจและทำเนียบศิษย์เก่า โรงเรียนอิสลามสันติชน</p>
+          <p class="text-[11px] text-slate-500">Santichon Islamic School Alumni Network</p>
+        </div>
+      </div>
+      <div class="text-center sm:text-right text-[11px] text-slate-500">
+        สงวนลิขสิทธิ์ข้อมูลภายในสถาบัน • เข้าถึงระบบเต็มรูปแบบด้วยรหัสผ่านแอดมิน
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* Hardcoded Admin Security Passcode */
+    const ADMIN_PASSCODE = "0889769731";
+    const STORAGE_KEY = "santichon_alumni_dataset_v2";
+    const SHEETS_URL_KEY = "santichon_google_sheets_url";
+    let isAdminLoggedIn = false;
+    let pendingDestinationTab = null;
+
+    const initialAlumniData = [
+      {
+        id: '1',
+        fullName: 'นายฮาซัน มะหะหมัด',
+        arabicName: 'حسن محمد (Hasan)',
+        maxLevel: 'ม.6',
+        batch: 'รุ่น 12 (ปี 2558)',
+        track: 'วิทย์-คณิต',
+        phone: '081-234-5678',
+        facebook: 'Hasan Mahamad',
+        line: 'hasan_m',
+        ig: '@hasan.tech',
+        educationDegree: 'ปริญญาตรี',
+        major: 'วิศวกรรมคอมพิวเตอร์',
+        university: 'มหาวิทยาลัยสงขลานครินทร์ (มอ.)',
+        businessName: 'บริษัท กรีนเทค ดิจิทัล โซลูชั่นส์ จำกัด',
+        position: 'ผู้ร่วมก่อตั้ง / Senior Software Engineer',
+        businessDesc: 'รับพัฒนาเว็บไซต์ โมบายแอปพลิเคชัน และระบบคลาวด์สำหรับธุรกิจและองค์กร ยินดีให้คำปรึกษาและส่วนลดพิเศษ 15% สำหรับศิษย์เก่าสันติชน',
+        bizImage: '',
+        adviceJunior: 'อย่ากลัวการลองสิ่งใหม่ๆ ภาษาอังกฤษและทักษะเทคโนโลยีจะเปิดประตูโอกาสให้เราไปได้ไกลในระดับสากล',
+        adviceAlumni: 'สร้าง Connection และเกื้อกูลกันในสายอาชีพ ร่วมกันสร้างชื่อเสียงให้โรงเรียนอิสลามสันติชนของเรา'
+      },
+      {
+        id: '2',
+        fullName: 'นางสาวฟาติมะฮ์ ดาโอะ',
+        arabicName: 'فاطمة داود (Fatimah)',
+        maxLevel: 'ม.6',
+        batch: 'รุ่น 14 (ปี 2560)',
+        track: 'ศิลป์-คำนวณ',
+        phone: '089-876-5432',
+        facebook: 'Fatimah Daoh Bakery',
+        line: 'fatimah_cake',
+        ig: '@fatimah_bakehouse',
+        educationDegree: 'ปริญญาตรี',
+        major: 'การตลาดดิจิทัล',
+        university: 'มหาวิทยาลัยรามคำแหง',
+        businessName: 'Fatimah Homemade & Halal Cafe',
+        position: 'เจ้าของกิจการ (Founder & Pastry Chef)',
+        businessDesc: 'ร้านเบเกอรี่และคาเฟ่ฮาลาล 100% รับจัดเบรคงานสัมมนาและเค้กวันเกิดในเขตกรุงเทพฯ และปริมณฑล วัตถุดิบพรีเมียม',
+        bizImage: '',
+        adviceJunior: 'ค้นหาสิ่งที่เรารักแล้วลงมือทำอย่างมีวินัย ความสำเร็จไม่ได้เกิดจากความเก่งเพียงอย่างเดียวแต่อยู่ที่ความสม่ำเสมอ',
+        adviceAlumni: 'ยินดีต้อนรับพี่น้องทุกคนที่ร้าน แวะมาจิบกาแฟและแลกเปลี่ยนไอเดียธุรกิจกันได้เสมอค่ะ'
+      },
+      {
+        id: '3',
+        fullName: 'นายอารีฟีน กาซอ',
+        arabicName: 'عارفين قاسم (Arifeen)',
+        maxLevel: 'ม.3',
+        batch: 'รุ่น 16 (ปี 2562)',
+        track: '-',
+        phone: '084-555-1212',
+        facebook: 'Arifeen Logistics',
+        line: 'arifeen_trans',
+        ig: '',
+        educationDegree: 'ปวส.',
+        major: 'การจัดการโลจิสติกส์และซัพพลายเชน',
+        university: 'วิทยาลัยเทคนิคมีนบุรี',
+        businessName: 'กาซอ ทรานสปอร์ต แอนด์ ชิปปิ้ง',
+        position: 'ผู้จัดการฝ่ายปฏิบัติการ',
+        businessDesc: 'บริการขนส่งสินค้าและพัสดุด่วนทั่วประเทศ พร้อมโกดังสต็อกสินค้ามาตรฐานฮาลาล จัดส่งตรงเวลา ปลอดภัย',
+        bizImage: '',
+        adviceJunior: 'สายวิชาชีพ (ปวช./ปวส.) มีความต้องการในตลาดงานสูงมาก ตั้งใจฝึกฝนฝีมือให้เชี่ยวชาญ รับรองไม่มีวันตกงาน',
+        adviceAlumni: 'หากพี่น้องศิษย์เก่ามีสินค้าที่ต้องการส่งกระจายทั่วไทย ยินดีดูแลเรื่องค่าขนส่งในราคามิตรภาพครับ'
+      },
+      {
+        id: '4',
+        fullName: 'นายมูฮัมหมัดซากีย์ ยะลา',
+        arabicName: 'محمد زكي (Zakiy)',
+        maxLevel: 'ม.6',
+        batch: 'รุ่น 10 (ปี 2556)',
+        track: 'ศาสนา-สามัญ',
+        phone: '082-999-3434',
+        facebook: 'Zakiy Shariah Consultant',
+        line: 'zakiy_law',
+        ig: '@ustaz_zakiy',
+        educationDegree: 'ปริญญาโท',
+        major: 'นิติศาสตร์อิสลามและเศรษฐศาสตร์การเงิน',
+        university: 'International Islamic University Malaysia (IIUM)',
+        businessName: 'ศูนย์ที่ปรึกษากฎหมายและการเงินอิสลาม อัล-อามีน',
+        position: 'ที่ปรึกษากฎหมายและธุรกรรมอิสลาม',
+        businessDesc: 'บริการให้คำปรึกษาการวางแผนมรดกตามหลักการอิสลาม กฎหมายครอบครัว และการจัดโครงสร้างสัญญาธุรกิจให้ถูกต้องตามหลักชารีอะฮ์',
+        bizImage: '',
+        adviceJunior: 'ยึดมั่นในคุณธรรม จริยธรรม และการศึกษาหาความรู้ทั้งศาสนาและสามัญควบคู่กัน จะทำให้ชีวิตมีบารอกัต',
+        adviceAlumni: 'ส่งเสริมการทำธุรกิจที่ถูกต้องตามหลักการ ร่วมกันสร้างเครือข่ายสหกรณ์และกองทุนช่วยเหลือสังคม'
+      },
+      {
+        id: '5',
+        fullName: 'นางสาวนูรฮายาตี สาแล๊ะ',
+        arabicName: 'نور حياتي (Nurhayati)',
+        maxLevel: 'ป.6',
+        batch: 'รุ่น 8 (ปี 2554)',
+        track: '-',
+        phone: '086-111-2233',
+        facebook: 'Nurhayati Salaeh MD',
+        line: 'dr_nurhayati',
+        ig: '@dr.nurhayati',
+        educationDegree: 'ปริญญาตรี',
+        major: 'แพทยศาสตรบัณฑิต',
+        university: 'จุฬาลงกรณ์มหาวิทยาลัย',
+        businessName: 'คลินิกแพทย์หญิงนูรฮายาตี เวชกรรม',
+        position: 'แพทย์เวชปฏิบัติทั่วไป / เจ้าของคลินิก',
+        businessDesc: 'คลินิกรักษาโรคทั่วไป ตรวจสุขภาพ วางแผนส่งเสริมสุขภาพครอบครัว และดูแลผู้สูงอายุ',
+        bizImage: '',
+        adviceJunior: 'การเรียนแพทย์หรือสายสุขภาพต้องใช้ความอดทนและความเสียสละ แต่เมื่อได้ช่วยเหลือผู้อื่นจะพบความสุขที่แท้จริง',
+        adviceAlumni: 'ดูแลสุขภาพกันด้วยนะคะ มีปัญหาสุขภาพปรึกษาพี่น้องศิษย์เก่าโรงเรียนอิสลามสันติชนได้เสมอค่ะ'
+      }
+    ];
+
+    let alumniList = loadAlumniData();
+    let randomizedBusinessList = [];
+    let uploadedBizImageData = '';
+
+    function loadAlumniData() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            return parsed;
+          }
+        }
+      } catch (err) {
+        console.error('Error loading stored data:', err);
+      }
+      return [...initialAlumniData];
+    }
+
+    function saveAlumniData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(alumniList));
+      } catch (err) {
+        console.error('Error saving data to localStorage:', err);
+      }
+    }
+
+    // Initialize on Page Load
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1. Initial random business list
+      shuffleBusinesses(false);
+      // 2. Default tab is 'business' (โชว์เฉพาะธุรกิจศิษย์เก่าเป็นหน้าแรก)
+      navigateToTab('business');
+      updateHeroCounts();
+    });
+
+    // Fisher-Yates Array Shuffle algorithm
+    function shuffleArray(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Function to shuffle business cards
+    function shuffleBusinesses(triggerAnimation = true) {
+      const rawBusinesses = alumniList.filter(a => a.businessName && a.businessName.trim() !== '');
+      randomizedBusinessList = shuffleArray(rawBusinesses);
+
+      if (triggerAnimation) {
+        const dice = document.getElementById('diceIcon');
+        if (dice) {
+          dice.classList.add('dice-spin');
+          setTimeout(() => dice.classList.remove('dice-spin'), 600);
+        }
+        showToast('🎲 สุ่มลำดับธุรกิจใหม่เรียบร้อยแล้ว!');
+      }
+
+      renderBusinessHub();
+      updateHeroCounts();
+    }
+
+    function renderBusinessHub() {
+      const grid = document.getElementById('businessGrid');
+      const searchVal = (document.getElementById('bizSearchInput')?.value || '').toLowerCase().trim();
+      const emptyState = document.getElementById('emptyBizState');
+      const countLabel = document.getElementById('bizCountLabel');
+
+      const filtered = randomizedBusinessList.filter(biz => {
+        if (!searchVal) return true;
+        return (
+          biz.businessName.toLowerCase().includes(searchVal) ||
+          biz.fullName.toLowerCase().includes(searchVal) ||
+          biz.position.toLowerCase().includes(searchVal) ||
+          biz.businessDesc.toLowerCase().includes(searchVal)
+        );
+      });
+
+      if (countLabel) {
+        countLabel.innerHTML = `แสดง <strong>${filtered.length}</strong> กิจการ (ลำดับสุ่ม)`;
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map((biz, index) => {
+        const badgeColor = index === 0 ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-200';
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg hover:border-emerald-400 transition-all flex flex-col justify-between group">
+            <div>
+              ${biz.bizImage ? `
+                <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
+                  <img src="${biz.bizImage}" alt="${biz.businessName}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                  <div class="absolute top-3 left-3 ${badgeColor} text-[10px] px-2 py-0.5 rounded-full shadow">
+                    #${index + 1}
+                  </div>
+                </div>
+              ` : `
+                <div class="h-32 bg-gradient-to-r from-emerald-800 to-slate-900 p-5 flex items-center justify-between text-white relative">
+                  <div class="absolute top-3 left-3 ${badgeColor} text-[10px] px-2 py-0.5 rounded-full shadow">
+                    #${index + 1}
+                  </div>
+                  <div class="pt-3">
+                    <span class="text-[11px] text-gold-400 font-semibold block uppercase tracking-wider">ธุรกิจศิษย์เก่าสันติชน</span>
+                    <h4 class="font-display font-bold text-base sm:text-lg leading-tight mt-0.5 line-clamp-1">${biz.businessName}</h4>
+                  </div>
+                  <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lg text-emerald-300 flex-shrink-0">
+                    <i class="fa-solid fa-store"></i>
+                  </div>
+                </div>
+              `}
+
+              <div class="p-5 space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 truncate">
+                    ${biz.position || 'เจ้าของกิจการ'}
+                  </span>
+                  <span class="text-xs text-slate-500 font-medium truncate">
+                    โดย: ${biz.fullName}
+                  </span>
+                </div>
+
+                <p class="text-xs text-slate-600 leading-relaxed line-clamp-3 bg-slate-50 p-3 rounded-xl border border-slate-100">
+                  ${biz.businessDesc || 'ไม่มีคำอธิบายกิจการเพิ่มเติม'}
+                </p>
+              </div>
+            </div>
+
+            <div class="p-5 pt-0">
+              <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                <div class="flex items-center space-x-2 text-slate-500">
+                  ${biz.phone ? `
+                    <a href="tel:${biz.phone}" class="hover:text-emerald-600 transition flex items-center gap-1">
+                      <i class="fa-solid fa-phone text-emerald-600"></i>
+                      <span>${biz.phone}</span>
+                    </a>
+                  ` : ''}
+                </div>
+                <button onclick="viewAlumniDetail('${biz.id}')" class="text-brand-700 hover:text-brand-800 font-semibold inline-flex items-center gap-1">
+                  ดูช่องทางติดต่อ <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterBusinesses() {
+      const searchVal = document.getElementById('bizSearchInput').value;
+      const clearBtn = document.getElementById('clearBizSearchBtn');
+      if (searchVal.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      renderBusinessHub();
+    }
+
+    function clearBizSearch() {
+      document.getElementById('bizSearchInput').value = '';
+      document.getElementById('clearBizSearchBtn').classList.add('hidden');
+      renderBusinessHub();
+    }
+
+    function requestAdminAccess(targetTab) {
+      if (isAdminLoggedIn) {
+        navigateToTab(targetTab);
+        return;
+      }
+      // Not logged in -> Open passcode modal
+      pendingDestinationTab = targetTab;
+      openAdminModal();
+    }
+
+    function openAdminModal() {
+      const modal = document.getElementById('adminAuthModal');
+      const pinInput = document.getElementById('adminPinInput');
+      const errEl = document.getElementById('adminAuthError');
+      errEl.classList.add('hidden');
+      pinInput.value = '';
+      modal.classList.remove('hidden');
+      setTimeout(() => pinInput.focus(), 150);
+    }
+
+    function closeAdminModal() {
+      document.getElementById('adminAuthModal').classList.add('hidden');
+      pendingDestinationTab = null;
+    }
+
+    function handleAdminAuth(event) {
+      event.preventDefault();
+      const pinInput = document.getElementById('adminPinInput');
+      const enteredCode = pinInput.value.trim();
+      const errEl = document.getElementById('adminAuthError');
+
+      if (enteredCode === ADMIN_PASSCODE) {
+        isAdminLoggedIn = true;
+        closeAdminModal();
+        updateAdminUIState();
+        showToast('🔓 ยืนยันรหัสผ่านแอดมินสำเร็จ! เข้าสู่ระบบแล้ว');
+
+        // Navigate to pending tab or default to directory
+        const dest = pendingDestinationTab || 'directory';
+        pendingDestinationTab = null;
+        navigateToTab(dest);
+      } else {
+        errEl.textContent = '❌ รหัสผ่านไม่ถูกต้อง กรุณากรอกรหัสแอดมินใหม่อีกครั้ง';
+        errEl.classList.remove('hidden');
+        pinInput.focus();
+        pinInput.select();
+      }
+    }
+
+    function logoutAdmin() {
+      isAdminLoggedIn = false;
+      updateAdminUIState();
+      navigateToTab('business');
+      showToast('🔒 ออกจากระบบแอดมินเรียบร้อยแล้ว');
+    }
+
+    function updateAdminUIState() {
+      const btnOpen = document.getElementById('btnOpenAdmin');
+      const badge = document.getElementById('adminLoggedInBadge');
+      const lockDir = document.getElementById('lock-directory');
+      const lockStats = document.getElementById('lock-stats');
+
+      if (isAdminLoggedIn) {
+        btnOpen.classList.add('hidden');
+        badge.classList.remove('hidden');
+        badge.classList.add('inline-flex');
+        
+        // Unlock indicators
+        if (lockDir) lockDir.className = "fa-solid fa-lock-open text-xs text-emerald-500 ml-0.5";
+        if (lockStats) lockStats.className = "fa-solid fa-lock-open text-xs text-emerald-500 ml-0.5";
+      } else {
+        btnOpen.classList.remove('hidden');
+        badge.classList.add('hidden');
+        badge.classList.remove('inline-flex');
+        
+        if (lockDir) lockDir.className = "fa-solid fa-lock text-xs text-amber-500 ml-0.5";
+        if (lockStats) lockStats.className = "fa-solid fa-lock text-xs text-amber-500 ml-0.5";
+      }
+    }
+
+    function navigateToTab(tabId) {
+      // Guard restricted tabs: only directory and stats require admin login
+      if (tabId !== 'business' && tabId !== 'wisdom' && !isAdminLoggedIn) {
+        requestAdminAccess(tabId);
+        return;
+      }
+
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      const activeEl = document.getElementById(`tab-${tabId}`);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      // Update Nav Buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.className = "nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center gap-1.5";
+      });
+      const activeBtn = document.getElementById(`nav-${tabId}`);
+      if (activeBtn) {
+        activeBtn.className = "nav-btn px-3.5 py-2 rounded-lg text-sm font-medium transition text-brand-700 bg-brand-50 flex items-center gap-1.5";
+      }
+
+      // Refresh view data
+      if (tabId === 'directory') renderDirectory();
+      if (tabId === 'business') renderBusinessHub();
+      if (tabId === 'wisdom') renderWisdomWall();
+      if (tabId === 'stats') renderStats();
+    }
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    function renderDirectory() {
+      const grid = document.getElementById('alumniGrid');
+      const searchVal = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+      const levelVal = document.getElementById('levelFilter')?.value || '';
+      const trackVal = document.getElementById('trackFilter')?.value || '';
+      const bizVal = document.getElementById('bizFilter')?.value || '';
+      const emptyState = document.getElementById('emptyState');
+      const countLabel = document.getElementById('resultsCount');
+
+      const filtered = alumniList.filter(item => {
+        const matchSearch = !searchVal || 
+          item.fullName.toLowerCase().includes(searchVal) ||
+          item.arabicName.toLowerCase().includes(searchVal) ||
+          item.university.toLowerCase().includes(searchVal) ||
+          item.major.toLowerCase().includes(searchVal) ||
+          item.businessName.toLowerCase().includes(searchVal) ||
+          item.batch.toLowerCase().includes(searchVal) ||
+          item.phone.includes(searchVal);
+
+        const matchLevel = !levelVal || item.maxLevel === levelVal;
+        const matchTrack = !trackVal || item.track === trackVal;
+        const matchBiz = !bizVal || (bizVal === 'yes' && item.businessName.trim() !== '');
+
+        return matchSearch && matchLevel && matchTrack && matchBiz;
+      });
+
+      countLabel.innerHTML = `แสดงข้อมูล <span class="font-semibold text-slate-800">${filtered.length}</span> จากทั้งหมด ${alumniList.length} คน`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map(alumni => {
+        const initial = alumni.fullName.replace(/นาย|นางสาว|นาง|ด.ช.|ด.ญ./g, '').trim().charAt(0) || 'A';
+        const hasBiz = alumni.businessName && alumni.businessName.trim() !== '';
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all p-5 flex flex-col justify-between group">
+            
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    ${alumni.maxLevel} (${alumni.batch})
+                  </span>
+                  ${alumni.track && alumni.track !== '-' ? `
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-600">
+                      ${alumni.track}
+                    </span>
+                  ` : ''}
+                </div>
+                ${hasBiz ? `
+                  <span class="text-amber-500 text-xs" title="มีธุรกิจ/กิจการ">
+                    <i class="fa-solid fa-store"></i>
+                  </span>
+                ` : ''}
+              </div>
+
+              <div class="flex items-start space-x-3.5 mb-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 text-white font-display font-bold text-lg flex items-center justify-center shadow-sm flex-shrink-0">
+                  ${initial}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-display font-bold text-slate-800 text-base leading-snug truncate group-hover:text-brand-700 transition">
+                    ${alumni.fullName}
+                  </h3>
+                  <p class="text-xs text-emerald-600 font-medium truncate">
+                    ${alumni.arabicName}
+                  </p>
+                </div>
+              </div>
+
+              <div class="space-y-2 text-xs text-slate-600 bg-slate-50/80 rounded-xl p-3 border border-slate-100 mb-4">
+                <div class="flex items-start space-x-2">
+                  <i class="fa-solid fa-building-columns text-slate-400 mt-0.5 w-3.5 text-center"></i>
+                  <div class="truncate flex-1">
+                    <span class="font-medium text-slate-700">${alumni.major || '-'}</span>
+                    <span class="text-slate-400 block text-[11px] truncate">${alumni.university || '-'}</span>
+                  </div>
+                </div>
+
+                ${hasBiz ? `
+                  <div class="flex items-start space-x-2 pt-1 border-t border-slate-200/60">
+                    <i class="fa-solid fa-briefcase text-amber-500 mt-0.5 w-3.5 text-center"></i>
+                    <div class="truncate flex-1">
+                      <span class="font-medium text-slate-800 truncate block">${alumni.businessName}</span>
+                      <span class="text-slate-500 text-[11px] block truncate">${alumni.position || 'เจ้าของกิจการ'}</span>
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-slate-100 text-slate-500">
+              <div class="flex items-center space-x-2 text-sm">
+                ${alumni.phone ? `<a href="tel:${alumni.phone}" title="โทร: ${alumni.phone}" class="text-slate-400 hover:text-emerald-600 transition"><i class="fa-solid fa-phone"></i></a>` : ''}
+                ${alumni.facebook ? `<span title="Facebook: ${alumni.facebook}" class="text-slate-400 hover:text-blue-600 transition"><i class="fa-brands fa-facebook"></i></span>` : ''}
+                ${alumni.line ? `<span title="LINE: ${alumni.line}" class="text-slate-400 hover:text-emerald-500 transition"><i class="fa-brands fa-line"></i></span>` : ''}
+                ${alumni.ig ? `<span title="IG: ${alumni.ig}" class="text-slate-400 hover:text-pink-600 transition"><i class="fa-brands fa-instagram"></i></span>` : ''}
+              </div>
+
+              <button onclick="viewAlumniDetail('${alumni.id}')" class="inline-flex items-center text-xs font-semibold text-brand-700 hover:text-brand-800 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition">
+                ดูประวัติเต็ม <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
+              </button>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterAlumni() {
+      const searchVal = document.getElementById('searchInput').value;
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (searchVal.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      renderDirectory();
+    }
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').classList.add('hidden');
+      renderDirectory();
+    }
+
+    function resetFilters() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('levelFilter').value = '';
+      document.getElementById('trackFilter').value = '';
+      document.getElementById('bizFilter').value = '';
+      clearSearch();
+      renderDirectory();
+    }
+
+    function renderWisdomWall() {
+      const grid = document.getElementById('wisdomGrid');
+      const wisdoms = alumniList.filter(a => (a.adviceJunior && a.adviceJunior.trim() !== '') || (a.adviceAlumni && a.adviceAlumni.trim() !== ''));
+
+      grid.innerHTML = wisdoms.map(w => {
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
+            
+            <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
+              <div class="w-10 h-10 rounded-xl bg-brand-100 text-brand-800 font-bold font-display flex items-center justify-center text-base">
+                ${w.fullName.charAt(0)}
+              </div>
+              <div>
+                <h4 class="font-display font-bold text-slate-800 text-sm">${w.fullName}</h4>
+                <p class="text-[11px] text-slate-500">${w.maxLevel} (${w.batch}) | ${w.major || 'ทั่วไป'} - ${w.university || 'โรงเรียนอิสลามสันติชน'}</p>
+              </div>
+            </div>
+
+            ${w.adviceJunior ? `
+              <div class="space-y-1">
+                <div class="flex items-center text-xs font-bold text-emerald-700">
+                  <i class="fa-solid fa-seedling mr-1.5 text-gold-500"></i> แนวทางสำหรับน้องๆ รุ่นหลัง:
+                </div>
+                <p class="text-xs text-slate-600 bg-emerald-50/50 p-3 rounded-xl border border-emerald-100/80 leading-relaxed italic">
+                  "${w.adviceJunior}"
+                </p>
+              </div>
+            ` : ''}
+
+            ${w.adviceAlumni ? `
+              <div class="space-y-1">
+                <div class="flex items-center text-xs font-bold text-indigo-700">
+                  <i class="fa-solid fa-handshake-angle mr-1.5 text-indigo-500"></i> ฝากถึงเพื่อนร่วมรุ่น & ศิษย์เก่า โรงเรียนอิสลามสันติชน:
+                </div>
+                <p class="text-xs text-slate-600 bg-indigo-50/50 p-3 rounded-xl border border-indigo-100/80 leading-relaxed italic">
+                  "${w.adviceAlumni}"
+                </p>
+              </div>
+            ` : ''}
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderStats() {
+      const total = alumniList.length;
+      document.getElementById('stat-total').textContent = total;
+      
+      const m6Count = alumniList.filter(a => a.maxLevel === 'ม.6').length;
+      document.getElementById('stat-m6').textContent = m6Count;
+      
+      const bizCount = alumniList.filter(a => a.businessName && a.businessName.trim() !== '').length;
+      document.getElementById('stat-biz').textContent = bizCount;
+
+      const uniqueUnis = new Set(alumniList.map(a => a.university.trim()).filter(u => u !== '')).size;
+      document.getElementById('stat-unis').textContent = uniqueUnis;
+
+      const levelCounts = {
+        'ม.6': m6Count,
+        'ม.3': alumniList.filter(a => a.maxLevel === 'ม.3').length,
+        'ป.6': alumniList.filter(a => a.maxLevel === 'ป.6').length,
+      };
+
+      const levelContainer = document.getElementById('statLevelBars');
+      levelContainer.innerHTML = Object.entries(levelCounts).map(([lvl, count]) => {
+        const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+        return `
+          <div>
+            <div class="flex justify-between text-xs font-medium text-slate-700 mb-1">
+              <span>จบระดับ ${lvl}</span>
+              <span>${count} คน (${percent}%)</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div class="h-full bg-brand-600 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const trackCounts = {};
+      alumniList.forEach(a => {
+        if (a.track && a.track !== '-') {
+          trackCounts[a.track] = (trackCounts[a.track] || 0) + 1;
+        }
+      });
+
+      const trackContainer = document.getElementById('statTrackBars');
+      const trackEntries = Object.entries(trackCounts);
+      if (trackEntries.length === 0) {
+        trackContainer.innerHTML = `<div class="text-xs text-slate-400 py-4 text-center">ไม่มีข้อมูลแผนการเรียน</div>`;
+      } else {
+        const totalTracks = Object.values(trackCounts).reduce((a, b) => a + b, 0);
+        trackContainer.innerHTML = trackEntries.map(([trk, count]) => {
+          const percent = totalTracks > 0 ? Math.round((count / totalTracks) * 100) : 0;
+          return `
+            <div>
+              <div class="flex justify-between text-xs font-medium text-slate-700 mb-1">
+                <span>แผนการเรียน ${trk}</span>
+                <span>${count} คน (${percent}%)</span>
+              </div>
+              <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full bg-indigo-500 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function updateHeroCounts() {
+      const bizCount = alumniList.filter(a => a.businessName && a.businessName.trim() !== '').length;
+      document.getElementById('hero-biz-count').textContent = bizCount;
+    }
+
+    function openSheetsModal() {
+      if (!isAdminLoggedIn) {
+        requestAdminAccess('directory');
+        return;
+      }
+      const savedUrl = localStorage.getItem(SHEETS_URL_KEY) || '';
+      document.getElementById('inputSheetsUrl').value = savedUrl;
+      openModal('sheetsModal');
+    }
+
+    function saveSheetsUrl() {
+      const url = document.getElementById('inputSheetsUrl').value.trim();
+      localStorage.setItem(SHEETS_URL_KEY, url);
+      closeModal('sheetsModal');
+      if (url) {
+        showToast('✅ บันทึก Web App URL สำหรับส่งข้อมูลเข้า Google Sheets สำเร็จ');
+      } else {
+        showToast('ล้างการเชื่อมต่อ Google Sheets เรียบร้อยแล้ว');
+      }
+    }
+
+    async function sendDataToGoogleSheet(data) {
+      const sheetsUrl = localStorage.getItem(SHEETS_URL_KEY);
+      if (!sheetsUrl || !sheetsUrl.startsWith('https://script.google.com')) {
+        return;
+      }
+
+      try {
+        // Send payload via POST with no-cors to accommodate Google Apps Script redirects
+        await fetch(sheetsUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        showToast('📊 ส่งข้อมูลเข้าสู่ Google Sheets อัตโนมัติเรียบร้อยแล้ว!');
+      } catch (error) {
+        console.error('Error sending to Google Sheet:', error);
+      }
+    }
+
+    function handleFormSubmit(event) {
+      event.preventDefault();
+
+      const newAlumni = {
+        id: Date.now().toString(),
+        fullName: document.getElementById('f_fullName').value.trim(),
+        arabicName: document.getElementById('f_arabicName').value.trim(),
+        maxLevel: document.getElementById('f_maxLevel').value,
+        batch: document.getElementById('f_batch').value.trim(),
+        track: document.getElementById('f_track').value,
+        phone: document.getElementById('f_phone').value.trim(),
+        facebook: document.getElementById('f_facebook').value.trim(),
+        line: document.getElementById('f_line').value.trim(),
+        ig: document.getElementById('f_ig').value.trim(),
+        educationDegree: document.getElementById('f_educationDegree').value,
+        major: document.getElementById('f_major').value.trim(),
+        university: document.getElementById('f_university').value.trim(),
+        businessName: document.getElementById('f_businessName').value.trim(),
+        position: document.getElementById('f_position').value.trim(),
+        businessDesc: document.getElementById('f_businessDesc').value.trim(),
+        bizImage: uploadedBizImageData,
+        adviceJunior: document.getElementById('f_adviceJunior').value.trim(),
+        adviceAlumni: document.getElementById('f_adviceAlumni').value.trim()
+      };
+
+      alumniList.unshift(newAlumni);
+      saveAlumniData();
+
+      // Trigger automatic background transmission to Google Sheet if configured
+      sendDataToGoogleSheet(newAlumni);
+
+      const shouldDownload = document.getElementById('f_autoDownloadCSV')?.checked;
+      if (shouldDownload) {
+        downloadCSVFile([newAlumni], `santichon_alumni_${newAlumni.fullName.replace(/\s+/g, '_')}.csv`);
+      }
+
+      document.getElementById('alumniForm').reset();
+      uploadedBizImageData = '';
+      document.getElementById('bizImagePreview').innerHTML = `<i class="fa-regular fa-image text-xl"></i>`;
+
+      closeModal('formModal');
+      shuffleBusinesses(false);
+      showToast(`บันทึกข้อมูลคุณ ${newAlumni.fullName} เรียบร้อยแล้ว!`);
+    }
+
+    function viewAlumniDetail(id) {
+      const item = alumniList.find(a => a.id === id);
+      if (!item) return;
+
+      const initial = item.fullName.replace(/นาย|นางสาว|นาง|ด.ช.|ด.ญ./g, '').trim().charAt(0) || 'A';
+      document.getElementById('detailAvatar').textContent = initial;
+      document.getElementById('detailFullName').textContent = item.fullName;
+      document.getElementById('detailArabicName').textContent = item.arabicName || '-';
+      document.getElementById('detailBadgeLevel').textContent = `${item.maxLevel} (${item.batch || 'ไม่ระบุรุ่น'})`;
+      document.getElementById('detailBadgeTrack').textContent = item.track && item.track !== '-' ? `แผนการเรียน: ${item.track}` : 'ไม่ระบุแผนการเรียน';
+
+      const content = document.getElementById('detailContent');
+      content.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs">
+              <i class="fa-solid fa-phone"></i>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-400 block">4. เบอร์โทรศัพท์</span>
+              <a href="tel:${item.phone}" class="font-semibold text-slate-800 hover:text-brand-600">${item.phone || '-'}</a>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2.5">
+            <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs">
+              <i class="fa-brands fa-facebook"></i>
+            </div>
+            <div class="truncate">
+              <span class="text-[10px] text-slate-400 block">5. Facebook</span>
+              <span class="font-medium text-slate-700 truncate block">${item.facebook || '-'}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2.5">
+            <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
+              <i class="fa-brands fa-line"></i>
+            </div>
+            <div class="truncate">
+              <span class="text-[10px] text-slate-400 block">6. LINE ID</span>
+              <span class="font-medium text-slate-700 truncate block">${item.line || '-'}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2.5">
+            <div class="w-7 h-7 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center text-xs">
+              <i class="fa-brands fa-instagram"></i>
+            </div>
+            <div class="truncate">
+              <span class="text-[10px] text-slate-400 block">7. Instagram (IG)</span>
+              <span class="font-medium text-slate-700 truncate block">${item.ig || '-'}</span>
+            </div>
+          </div>
+        </div>
+
+        ${item.businessName ? `
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-slate-800 flex items-center uppercase tracking-wider">
+              <i class="fa-solid fa-store text-amber-600 mr-2"></i> 11-13. ข้อมูลธุรกิจและกิจการ
+            </h4>
+            <div class="bg-amber-50/40 p-4 rounded-xl border border-amber-200 text-xs space-y-2">
+              <p><span class="text-slate-500">11. ชื่อธุรกิจ/กิจการ:</span> <strong class="text-slate-800 text-sm block">${item.businessName}</strong></p>
+              <p><span class="text-slate-500">12. ตำแหน่ง:</span> <strong class="text-slate-700">${item.position || '-'}</strong></p>
+              <p class="leading-relaxed"><span class="text-slate-500">13. แนะนำกิจการ:</span> <br><span class="text-slate-700 mt-1 block">${item.businessDesc || '-'}</span></p>
+              ${item.bizImage ? `
+                <div class="mt-2 pt-2 border-t border-amber-200">
+                  <span class="text-slate-400 text-[11px] block mb-1">ภาพแนบกิจการ:</span>
+                  <img src="${item.bizImage}" class="max-h-48 rounded-lg object-cover border border-amber-200" alt="business">
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="space-y-2">
+          <h4 class="text-xs font-bold text-slate-800 flex items-center uppercase tracking-wider">
+            <i class="fa-solid fa-graduation-cap text-brand-600 mr-2"></i> 8-10. ประวัติการศึกษา
+          </h4>
+          <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs space-y-1.5">
+            <p><span class="text-slate-400">ระดับการศึกษา:</span> <strong class="text-slate-700">${item.educationDegree || '-'}</strong></p>
+            <p><span class="text-slate-400">สาขาวิชา:</span> <strong class="text-slate-700">${item.major || '-'}</strong></p>
+            <p><span class="text-slate-400">สถาบันการศึกษา:</span> <strong class="text-slate-700">${item.university || '-'}</strong></p>
+          </div>
+        </div>
+
+        ${item.adviceJunior ? `
+          <div class="space-y-1.5">
+            <h4 class="text-xs font-bold text-emerald-800 flex items-center">
+              <i class="fa-solid fa-seedling text-emerald-600 mr-2"></i> 14. สิ่งที่อยากส่งต่อหรือให้แนวทางกับน้องๆ
+            </h4>
+            <div class="bg-emerald-50/70 p-3.5 rounded-xl border border-emerald-200 text-xs text-emerald-950 italic leading-relaxed">
+              "${item.adviceJunior}"
+            </div>
+          </div>
+        ` : ''}
+
+        ${item.adviceAlumni ? `
+          <div class="space-y-1.5">
+            <h4 class="text-xs font-bold text-indigo-800 flex items-center">
+              <i class="fa-solid fa-handshake-angle text-indigo-600 mr-2"></i> 15. สิ่งที่อยากส่งต่อให้เพื่อนร่วมรุ่น / ศิษย์เก่า
+            </h4>
+            <div class="bg-indigo-50/70 p-3.5 rounded-xl border border-indigo-200 text-xs text-indigo-950 italic leading-relaxed">
+              "${item.adviceAlumni}"
+            </div>
+          </div>
+        ` : ''}
+      `;
+
+      openModal('detailModal');
+    }
+
+    function previewImage(input, previewId) {
+      const file = input.files[0];
+      if (file) {
+        if (file.size > 2 * 1024 * 1024) {
+          showToast('ขนาดไฟล์รูปภาพเกิน 2MB กรุณาเลือกรูปใหม่');
+          input.value = '';
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          uploadedBizImageData = e.target.result;
+          document.getElementById(previewId).innerHTML = `
+            <img src="${e.target.result}" class="w-full h-full object-cover">
+          `;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleLevelChange(val) {
+      const trackSelect = document.getElementById('f_track');
+      if (val === 'ม.6') {
+        trackSelect.value = 'วิทย์-คณิต';
+      } else {
+        trackSelect.value = '-';
+      }
+    }
+
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById('eyeIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-solid fa-eye-slash';
+      } else {
+        input.type = 'password';
+        icon.className = 'fa-solid fa-eye';
+      }
+    }
+
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const msgEl = document.getElementById('toastMsg');
+      msgEl.textContent = message;
+      
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3500);
+    }
+
+    function exportToCSV() {
+      if (!isAdminLoggedIn) {
+        requestAdminAccess('directory');
+        return;
+      }
+
+      downloadCSVFile(alumniList, `alumni_santichon_all_${new Date().toISOString().slice(0,10)}.csv`);
+      showToast('ดาวน์โหลดฐานข้อมูล CSV (Excel) เรียบร้อยแล้ว');
+    }
+
+    function downloadCSVFile(dataArray, fileName) {
+      const headers = [
+        "ID", "ชื่อ-สกุล", "ชื่ออาหรับ", "ระดับจบสูงสุด", "รุ่น/ปี", "แผนการเรียน", 
+        "เบอร์โทร", "Facebook", "Line", "Instagram", "ระดับการศึกษา", 
+        "สาขาวิชา", "สถาบัน", "ธุรกิจ/กิจการ", "ตำแหน่ง", "แนะนำกิจการ", 
+        "แนวทางให้น้องๆ", "แนวทางให้เพื่อนศิษย์เก่า"
+      ];
+
+      const rows = dataArray.map(a => [
+        `"${a.id || ''}"`,
+        `"${(a.fullName || '').replace(/"/g, '""')}"`,
+        `"${(a.arabicName || '').replace(/"/g, '""')}"`,
+        `"${a.maxLevel || ''}"`,
+        `"${(a.batch || '').replace(/"/g, '""')}"`,
+        `"${a.track || ''}"`,
+        `"${a.phone || ''}"`,
+        `"${(a.facebook || '').replace(/"/g, '""')}"`,
+        `"${(a.line || '').replace(/"/g, '""')}"`,
+        `"${(a.ig || '').replace(/"/g, '""')}"`,
+        `"${a.educationDegree || ''}"`,
+        `"${(a.major || '').replace(/"/g, '""')}"`,
+        `"${(a.university || '').replace(/"/g, '""')}"`,
+        `"${(a.businessName || '').replace(/"/g, '""')}"`,
+        `"${(a.position || '').replace(/"/g, '""')}"`,
+        `"${(a.businessDesc || '').replace(/"/g, '""')}"`,
+        `"${(a.adviceJunior || '').replace(/"/g, '""')}"`,
+        `"${(a.adviceAlumni || '').replace(/"/g, '""')}"`
+      ]);
+
+      const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join("\r\n");
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function importCSVFile(input) {
+      if (!isAdminLoggedIn) {
+        requestAdminAccess('directory');
+        input.value = '';
+        return;
+      }
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const text = e.target.result;
+          const lines = text.split(/\r\n|\n/).filter(line => line.trim() !== '');
+          if (lines.length <= 1) {
+            showToast('ไฟล์ CSV ว่างเปล่าหรือไม่มีข้อมูล');
+            return;
+          }
+
+          function parseCSVLine(line) {
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+              const char = line[i];
+              if (char === '"' && line[i + 1] === '"') {
+                current += '"';
+                i++;
+              } else if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === ',' && !inQuotes) {
+                values.push(current.trim());
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            values.push(current.trim());
+            return values;
+          }
+
+          const importedAlumni = [];
+          for (let i = 1; i < lines.length; i++) {
+            const cols = parseCSVLine(lines[i]);
+            if (cols.length >= 2 && cols[1]) {
+              importedAlumni.push({
+                id: cols[0] || Date.now().toString() + i,
+                fullName: cols[1] || '',
+                arabicName: cols[2] || '',
+                maxLevel: cols[3] || 'ม.6',
+                batch: cols[4] || '',
+                track: cols[5] || '-',
+                phone: cols[6] || '',
+                facebook: cols[7] || '',
+                line: cols[8] || '',
+                ig: cols[9] || '',
+                educationDegree: cols[10] || 'ปริญญาตรี',
+                major: cols[11] || '',
+                university: cols[12] || '',
+                businessName: cols[13] || '',
+                position: cols[14] || '',
+                businessDesc: cols[15] || '',
+                bizImage: '',
+                adviceJunior: cols[16] || '',
+                adviceAlumni: cols[17] || ''
+              });
+            }
+          }
+
+          if (importedAlumni.length > 0) {
+            alumniList = importedAlumni;
+            saveAlumniData();
+            shuffleBusinesses(false);
+            renderDirectory();
+            showToast(`นำเข้าข้อมูลจาก CSV สำเร็จ ${importedAlumni.length} รายการ!`);
+          } else {
+            showToast('ไม่พบข้อมูลที่ถูกต้องในไฟล์ CSV');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('เกิดข้อผิดพลาดในการอ่านไฟล์ CSV');
+        }
+        input.value = '';
+      };
+      reader.readAsText(file, 'UTF-8');
+    }
+
+    function printDirectory() {
+      if (!isAdminLoggedIn) {
+        requestAdminAccess('directory');
+        return;
+      }
+      window.print();
+    }
+  </script>
+</body>
 </html>
