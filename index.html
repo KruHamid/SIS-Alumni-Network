@@ -130,6 +130,12 @@
         </nav>
 
         <div class="flex items-center space-x-2 sm:space-x-3">
+          <!-- Cloud Sync Status & Refresh Button -->
+          <button onclick="fetchCloudData(true)" id="btnSyncCloud" title="ดึงข้อมูลล่าสุดจาก Google Sheets" class="inline-flex items-center px-2.5 py-1.5 rounded-xl text-xs font-medium text-slate-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 transition">
+            <i id="syncIcon" class="fa-solid fa-rotate text-emerald-600 mr-1.5"></i>
+            <span id="syncText" class="hidden sm:inline">ซิงค์ข้อมูลกลาง</span>
+          </button>
+
           <!-- Admin Status Toggle -->
           <div id="adminStatusContainer">
             <button onclick="openAdminModal()" id="btnOpenAdmin" class="inline-flex items-center px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300/80 transition">
@@ -892,6 +898,9 @@
     const ADMIN_PASSCODE = "0889769731";
     const STORAGE_KEY = "santichon_alumni_dataset_v2";
     const SHEETS_URL_KEY = "santichon_google_sheets_url";
+    /* คุณสามารถนำ Web App URL มาวางไว้ตรงนี้เพื่อให้ทุกเครื่องเปิดมาแล้วซิงค์ข้อมูลกลางทันที */
+    const DEFAULT_SHEETS_URL = "https://script.google.com/macros/s/AKfycbz3gyHmrGSPz7aMbKTKy7KfdL3b6X2Y4yAaFi7A0QI540u9Bx9eU6-sXerr4-XRX6u_cQ/exec"; 
+
     let isAdminLoggedIn = false;
     let pendingDestinationTab = null;
     let pendingDeleteId = null;
@@ -1032,6 +1041,58 @@
       }
     }
 
+    function getActiveSheetsUrl() {
+      const stored = localStorage.getItem(SHEETS_URL_KEY);
+      if (stored && stored.trim() !== '') return stored.trim();
+      return DEFAULT_SHEETS_URL.trim();
+    }
+
+    // ฟังก์ชันดึงข้อมูลจาก Google Sheets กลางเพื่อให้ทุกเครื่องแสดงผลเหมือนกัน
+    async function fetchCloudData(showNotification = false) {
+      const sheetsUrl = getActiveSheetsUrl();
+      const syncIcon = document.getElementById('syncIcon');
+      const syncText = document.getElementById('syncText');
+
+      if (!sheetsUrl) {
+        if (showNotification) {
+          showToast('⚠️ กรุณาเชื่อมต่อ Google Sheets Web App URL ในเมนูแอดมินก่อน');
+        }
+        return;
+      }
+
+      if (syncIcon) syncIcon.classList.add('fa-spin');
+      if (syncText) syncText.textContent = "กำลังซิงค์...";
+
+      try {
+        const response = await fetch(sheetsUrl + (sheetsUrl.includes('?') ? '&' : '?') + 'action=read&t=' + Date.now());
+        if (!response.ok) throw new Error('Cloud response error');
+        const cloudData = await response.json();
+
+        if (Array.isArray(cloudData) && cloudData.length > 0) {
+          alumniList = cloudData;
+          saveAlumniData(); // บันทึกสำรองในแคชเครื่อง
+          shuffleBusinesses(false);
+          renderDirectory();
+          renderWisdomWall();
+          renderStats();
+          updateHeroCounts();
+          if (showNotification) {
+            showToast(`✅ ซิงค์ข้อมูลล่าสุดจาก Google Sheets แล้ว (${cloudData.length} ท่าน)`);
+          }
+        } else if (Array.isArray(cloudData) && cloudData.length === 0) {
+          if (showNotification) showToast('ℹ️ Google Sheets ยังไม่มีข้อมูลใหม่');
+        }
+      } catch (err) {
+        console.error('Error fetching cloud data:', err);
+        if (showNotification) {
+          showToast('⚠️ ไม่สามารถดึงข้อมูลจาก Google Sheets ได้ (กำลังแสดงข้อมูลแคช)');
+        }
+      } finally {
+        if (syncIcon) syncIcon.classList.remove('fa-spin');
+        if (syncText) syncText.textContent = "ซิงค์ข้อมูลกลาง";
+      }
+    }
+
     // Initialize on Page Load
     window.addEventListener('DOMContentLoaded', () => {
       // 1. Initial random business list
@@ -1039,6 +1100,8 @@
       // 2. Default tab is 'business' (โชว์เฉพาะธุรกิจศิษย์เก่าเป็นหน้าแรก)
       navigateToTab('business');
       updateHeroCounts();
+      // 3. ดึงข้อมูลล่าสุดจาก Google Sheets กลางทันทีที่เปิดเว็บ
+      fetchCloudData(false);
     });
 
     // Fisher-Yates Array Shuffle algorithm
@@ -1574,14 +1637,15 @@
       localStorage.setItem(SHEETS_URL_KEY, url);
       closeModal('sheetsModal');
       if (url) {
-        showToast('✅ บันทึก Web App URL สำหรับส่งข้อมูลเข้า Google Sheets สำเร็จ');
+        showToast('✅ บันทึก Web App URL สำเร็จ กำลังซิงค์ข้อมูล...');
+        fetchCloudData(true);
       } else {
         showToast('ล้างการเชื่อมต่อ Google Sheets เรียบร้อยแล้ว');
       }
     }
 
     async function sendDataToGoogleSheet(data) {
-      const sheetsUrl = localStorage.getItem(SHEETS_URL_KEY);
+      const sheetsUrl = getActiveSheetsUrl();
       if (!sheetsUrl || !sheetsUrl.startsWith('https://script.google.com')) {
         return;
       }
@@ -1597,6 +1661,24 @@
         showToast('📊 ส่งข้อมูลเข้าสู่ Google Sheets อัตโนมัติเรียบร้อยแล้ว!');
       } catch (error) {
         console.error('Error sending to Google Sheet:', error);
+      }
+    }
+
+    async function deleteFromGoogleSheet(id) {
+      const sheetsUrl = getActiveSheetsUrl();
+      if (!sheetsUrl || !sheetsUrl.startsWith('https://script.google.com')) {
+        return;
+      }
+
+      try {
+        await fetch(sheetsUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'delete', id: id })
+        });
+      } catch (err) {
+        console.error('Error deleting from Google Sheet:', err);
       }
     }
 
@@ -1826,8 +1908,12 @@
       const targetIndex = alumniList.findIndex(a => a.id === pendingDeleteId);
       if (targetIndex !== -1) {
         const deletedName = alumniList[targetIndex].fullName;
+        const targetId = pendingDeleteId;
         alumniList.splice(targetIndex, 1);
         saveAlumniData();
+
+        // ส่งคำสั่งลบข้อมูลออกจาก Google Sheets กลางด้วย
+        deleteFromGoogleSheet(targetId);
 
         // Refresh views
         shuffleBusinesses(false);
