@@ -1162,12 +1162,19 @@
       grid.innerHTML = filtered.map((biz, index) => {
         const badgeColor = index === 0 ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-slate-800 text-slate-200';
 
+        const hasValidImage = biz.bizImage && biz.bizImage.startsWith('data:image/');
+
         return `
           <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg hover:border-emerald-400 transition-all flex flex-col justify-between group">
             <div>
-              ${biz.bizImage ? `
+              ${hasValidImage ? `
                 <div class="h-44 w-full bg-slate-100 overflow-hidden relative">
-                  <img src="${biz.bizImage}" alt="${biz.businessName}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                  <img 
+                    src="${biz.bizImage}" 
+                    alt="${biz.businessName}" 
+                    class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    onerror="this.parentElement.style.display='none';"
+                  >
                   <div class="absolute top-3 left-3 ${badgeColor} text-[10px] px-2 py-0.5 rounded-full shadow">
                     #${index + 1}
                   </div>
@@ -1804,10 +1811,10 @@
               <p><span class="text-slate-500">11. ชื่อธุรกิจ/กิจการ:</span> <strong class="text-slate-800 text-sm block">${item.businessName}</strong></p>
               <p><span class="text-slate-500">12. ตำแหน่ง:</span> <strong class="text-slate-700">${item.position || '-'}</strong></p>
               <p class="leading-relaxed"><span class="text-slate-500">13. แนะนำกิจการ:</span> <br><span class="text-slate-700 mt-1 block">${item.businessDesc || '-'}</span></p>
-              ${item.bizImage ? `
+              ${item.bizImage && item.bizImage.startsWith('data:image/') ? `
                 <div class="mt-2 pt-2 border-t border-amber-200">
                   <span class="text-slate-400 text-[11px] block mb-1">ภาพแนบกิจการ:</span>
-                  <img src="${item.bizImage}" class="max-h-48 rounded-lg object-cover border border-amber-200" alt="business">
+                  <img src="${item.bizImage}" class="max-h-48 rounded-lg object-cover border border-amber-200 shadow-sm" alt="business" onerror="this.style.display='none'">
                 </div>
               ` : ''}
             </div>
@@ -1929,23 +1936,62 @@
       }
     }
 
+    // ฟังก์ชันย่อและบีบอัดรูปภาพอัตโนมัติ เพื่อให้บันทึกใน Google Sheets ได้ครบ 100%
+    function compressImageFile(file, maxWidth, maxHeight, quality, callback) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          let width = img.width;
+          let height = img.height;
+
+          // คำนวณอัตราส่วนการย่อขนาด (รักษา Aspect Ratio เดิม)
+          if (width > maxWidth || height > maxHeight) {
+            if (width / height > maxWidth / maxHeight) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            } else {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // แปลงเป็น JPEG คุณภาพที่เหมาะสม
+          let compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+
+          // ตรวจสอบขนาดตัวอักษรไม่ให้เกินขีดจำกัด Google Sheets (ต่ำกว่า 40,000 ตัวอักษร)
+          if (compressedBase64.length > 40000) {
+            compressedBase64 = canvas.toDataURL('image/jpeg', 0.45);
+          }
+
+          callback(compressedBase64);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
     function previewImage(input, previewId) {
       const file = input.files[0];
-      if (file) {
-        if (file.size > 2 * 1024 * 1024) {
-          showToast('ขนาดไฟล์รูปภาพเกิน 2MB กรุณาเลือกรูปใหม่');
-          input.value = '';
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          uploadedBizImageData = e.target.result;
-          document.getElementById(previewId).innerHTML = `
-            <img src="${e.target.result}" class="w-full h-full object-cover">
-          `;
-        };
-        reader.readAsDataURL(file);
-      }
+      if (!file) return;
+
+      const previewContainer = document.getElementById(previewId);
+      previewContainer.innerHTML = `<i class="fa-solid fa-spinner fa-spin text-emerald-600 text-lg"></i>`;
+
+      // ย่อภาพอัตโนมัติให้มีขนาดเหมาะสมกับการแสดงผลบนการ์ด (~600x450px)
+      compressImageFile(file, 600, 450, 0.65, function(optimizedBase64) {
+        uploadedBizImageData = optimizedBase64;
+        previewContainer.innerHTML = `
+          <img src="${optimizedBase64}" class="w-full h-full object-cover">
+        `;
+        showToast('📷 ปรับขนาดและบีบอัดรูปภาพพร้อมใช้งานแล้ว');
+      });
     }
 
     function handleLevelChange(val) {
