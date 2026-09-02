@@ -794,10 +794,61 @@
 
       <div class="px-6 py-3 bg-slate-50 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
         <span>ข้อมูลศิษย์เก่า โรงเรียนอิสลามสันติชน</span>
-        <button onclick="closeModal('detailModal')" class="px-4 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium transition">
-          ปิดหน้าต่าง
-        </button>
+        <div class="flex items-center gap-2">
+          <button id="detailDeleteBtn" onclick="deleteCurrentDetailAlumni()" class="hidden px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-medium transition items-center gap-1">
+            <i class="fa-solid fa-trash-can"></i> ลบข้อมูลนี้
+          </button>
+          <button onclick="closeModal('detailModal')" class="px-4 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium transition">
+            ปิดหน้าต่าง
+          </button>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: CUSTOM DELETE CONFIRMATION          -->
+  <!-- ========================================== -->
+  <div id="deleteConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 hidden">
+    <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-slate-200 overflow-hidden p-6 text-center transform transition-all">
+      <div class="w-14 h-14 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3 class="font-display font-bold text-lg text-slate-800 mb-1">ยืนยันการลบข้อมูล</h3>
+      <p class="text-xs text-slate-500 mb-2">คุณต้องการลบข้อมูลของศิษย์เก่าท่านนี้ใช่หรือไม่?</p>
+      <div class="bg-red-50/60 border border-red-200 rounded-xl p-3 mb-4">
+        <p id="deleteTargetName" class="font-bold text-sm text-slate-800"></p>
+        <span class="text-[11px] text-red-600 block mt-0.5">การลบนี้จะไม่สามารถย้อนกลับได้</span>
+      </div>
+
+      <form id="deleteAuthForm" onsubmit="executeDeleteAlumni(event)" class="space-y-4 text-left">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5 text-center">กรอกรหัสผ่าน 10 หลัก เพื่อยืนยันการลบ</label>
+          <div class="relative">
+            <input 
+              type="password" 
+              id="deletePasscodeInput" 
+              placeholder="กรอกรหัสผ่าน 10 หลัก" 
+              required
+              class="w-full pl-4 pr-10 py-2.5 text-sm font-mono tracking-wider bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:bg-white focus:outline-none text-center"
+              autocomplete="off"
+            >
+            <button type="button" onclick="togglePasswordVisibility('deletePasscodeInput')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-sm">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+          <p id="deletePasscodeError" class="hidden text-xs text-red-600 mt-1.5 text-center font-medium"></p>
+        </div>
+
+        <div class="flex gap-2.5 pt-1">
+          <button type="button" onclick="closeDeleteModal()" class="w-1/2 py-2.5 rounded-xl text-xs font-medium text-slate-600 hover:bg-slate-100 transition border border-slate-200">
+            ยกเลิก
+          </button>
+          <button type="submit" class="w-1/2 py-2.5 rounded-xl text-xs font-semibold text-white bg-red-600 hover:bg-red-700 shadow transition">
+            <i class="fa-solid fa-trash-can mr-1"></i> ยืนยันลบข้อมูล
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -843,6 +894,8 @@
     const SHEETS_URL_KEY = "santichon_google_sheets_url";
     let isAdminLoggedIn = false;
     let pendingDestinationTab = null;
+    let pendingDeleteId = null;
+    let currentDetailAlumniId = null;
 
     const initialAlumniData = [
       {
@@ -1203,6 +1256,12 @@
         if (lockDir) lockDir.className = "fa-solid fa-lock text-xs text-amber-500 ml-0.5";
         if (lockStats) lockStats.className = "fa-solid fa-lock text-xs text-amber-500 ml-0.5";
       }
+
+      // Re-render directory cards to toggle delete action buttons
+      const dirTab = document.getElementById('tab-directory');
+      if (dirTab && !dirTab.classList.contains('hidden')) {
+        renderDirectory();
+      }
     }
 
     function navigateToTab(tabId) {
@@ -1342,9 +1401,16 @@
                 ${alumni.ig ? `<span title="IG: ${alumni.ig}" class="text-slate-400 hover:text-pink-600 transition"><i class="fa-brands fa-instagram"></i></span>` : ''}
               </div>
 
-              <button onclick="viewAlumniDetail('${alumni.id}')" class="inline-flex items-center text-xs font-semibold text-brand-700 hover:text-brand-800 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition">
-                ดูประวัติเต็ม <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
-              </button>
+              <div class="flex items-center gap-1.5">
+                ${isAdminLoggedIn ? `
+                  <button onclick="promptDeleteAlumni('${alumni.id}', '${alumni.fullName.replace(/'/g, "\\'")}')" title="ลบข้อมูลศิษย์เก่า" class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold text-red-600 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 transition">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
+                ` : ''}
+                <button onclick="viewAlumniDetail('${alumni.id}')" class="inline-flex items-center text-xs font-semibold text-brand-700 hover:text-brand-800 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition">
+                  ดูประวัติเต็ม <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
+                </button>
+              </div>
             </div>
 
           </div>
@@ -1582,6 +1648,7 @@
     function viewAlumniDetail(id) {
       const item = alumniList.find(a => a.id === id);
       if (!item) return;
+      currentDetailAlumniId = id;
 
       const initial = item.fullName.replace(/นาย|นางสาว|นาง|ด.ช.|ด.ญ./g, '').trim().charAt(0) || 'A';
       document.getElementById('detailAvatar').textContent = initial;
@@ -1589,6 +1656,18 @@
       document.getElementById('detailArabicName').textContent = item.arabicName || '-';
       document.getElementById('detailBadgeLevel').textContent = `${item.maxLevel} (${item.batch || 'ไม่ระบุรุ่น'})`;
       document.getElementById('detailBadgeTrack').textContent = item.track && item.track !== '-' ? `แผนการเรียน: ${item.track}` : 'ไม่ระบุแผนการเรียน';
+
+      // Toggle delete button inside modal depending on admin status
+      const detailDeleteBtn = document.getElementById('detailDeleteBtn');
+      if (detailDeleteBtn) {
+        if (isAdminLoggedIn) {
+          detailDeleteBtn.classList.remove('hidden');
+          detailDeleteBtn.classList.add('inline-flex');
+        } else {
+          detailDeleteBtn.classList.add('hidden');
+          detailDeleteBtn.classList.remove('inline-flex');
+        }
+      }
 
       const content = document.getElementById('detailContent');
       content.innerHTML = `
@@ -1688,6 +1767,80 @@
       `;
 
       openModal('detailModal');
+    }
+
+    function promptDeleteAlumni(id, name) {
+      if (!isAdminLoggedIn) {
+        requestAdminAccess('directory');
+        return;
+      }
+      pendingDeleteId = id;
+      document.getElementById('deleteTargetName').textContent = name || 'ไม่ระบุชื่อ';
+      
+      const pinInput = document.getElementById('deletePasscodeInput');
+      const errEl = document.getElementById('deletePasscodeError');
+      if (pinInput) pinInput.value = '';
+      if (errEl) errEl.classList.add('hidden');
+      
+      openModal('deleteConfirmModal');
+      setTimeout(() => pinInput?.focus(), 150);
+    }
+
+    function deleteCurrentDetailAlumni() {
+      if (!currentDetailAlumniId) return;
+      const target = alumniList.find(a => a.id === currentDetailAlumniId);
+      closeModal('detailModal');
+      promptDeleteAlumni(currentDetailAlumniId, target ? target.fullName : '');
+    }
+
+    function closeDeleteModal() {
+      closeModal('deleteConfirmModal');
+      const pinInput = document.getElementById('deletePasscodeInput');
+      const errEl = document.getElementById('deletePasscodeError');
+      if (pinInput) pinInput.value = '';
+      if (errEl) errEl.classList.add('hidden');
+      pendingDeleteId = null;
+    }
+
+    function executeDeleteAlumni(event) {
+      if (event) event.preventDefault();
+      if (!pendingDeleteId) return;
+
+      const pinInput = document.getElementById('deletePasscodeInput');
+      const errEl = document.getElementById('deletePasscodeError');
+      const enteredCode = pinInput ? pinInput.value.trim() : '';
+
+      // ตรวจสอบรหัสผ่าน 10 หลักอีกครั้งก่อนลบ
+      if (enteredCode !== ADMIN_PASSCODE) {
+        if (errEl) {
+          errEl.textContent = '❌ รหัสผ่านไม่ถูกต้อง ไม่สามารถลบข้อมูลได้';
+          errEl.classList.remove('hidden');
+        }
+        if (pinInput) {
+          pinInput.focus();
+          pinInput.select();
+        }
+        return;
+      }
+
+      const targetIndex = alumniList.findIndex(a => a.id === pendingDeleteId);
+      if (targetIndex !== -1) {
+        const deletedName = alumniList[targetIndex].fullName;
+        alumniList.splice(targetIndex, 1);
+        saveAlumniData();
+
+        // Refresh views
+        shuffleBusinesses(false);
+        renderDirectory();
+        renderWisdomWall();
+        renderStats();
+        updateHeroCounts();
+
+        closeDeleteModal();
+        showToast(`🗑️ ลบข้อมูลคุณ ${deletedName} เรียบร้อยแล้ว`);
+      } else {
+        closeDeleteModal();
+      }
     }
 
     function previewImage(input, previewId) {
